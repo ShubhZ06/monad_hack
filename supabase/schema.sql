@@ -9,6 +9,9 @@ CREATE TABLE public.venues (
     image_url TEXT,
     reviews_count INTEGER DEFAULT 0,
     wallet_address TEXT, -- To map to the Monad VenueRegistry
+    latitude DOUBLE PRECISION, -- GPS latitude for location-based discovery
+    longitude DOUBLE PRECISION, -- GPS longitude for location-based discovery
+    address TEXT, -- Human-readable address (e.g., 'Andheri West, Mumbai')
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -46,8 +49,6 @@ CREATE TABLE public.soft_interest (
     UNIQUE(event_id, wallet_address) -- Prevent clicking "I'm in" twice
 );
 
--- Note: Row Level Security (RLS) can be enabled later for production.
-
 -- 5. Communities Table
 CREATE TABLE public.communities (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -80,8 +81,52 @@ CREATE TABLE public.comments (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Insert some dummy communities to start with
-INSERT INTO public.communities (name, description, member_count) VALUES 
-('NYU Builders', 'Official community for NYU students building on Monad', 142),
-('Columbia Crypto', 'Columbia University Blockchain and Crypto Club', 89),
-('Monad NYC', 'General Monad enthusiasts in the New York area', 450);
+-- 9. Reviews Table (For venue reviews on the Discovery Feed)
+CREATE TABLE public.reviews (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    venue_id UUID REFERENCES public.venues(id) ON DELETE CASCADE,
+    wallet_address TEXT NOT NULL, -- reviewer's wallet address
+    rating INTEGER CHECK (rating >= 1 AND rating <= 5),
+    vibe_tag TEXT, -- 'Insane', 'Worth it', 'Mid'
+    comment TEXT,
+    image_url TEXT, -- optional photo from reviewer
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    UNIQUE(venue_id, wallet_address) -- one review per user per venue
+);
+
+-- 10. Coupons Table (Monad Testnet NFT Discount Coupons awarded for reviews)
+CREATE TABLE IF NOT EXISTS public.coupons (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    venue_id UUID REFERENCES public.venues(id) ON DELETE CASCADE,
+    venue_name TEXT NOT NULL,
+    wallet_address TEXT NOT NULL,
+    discount_title TEXT NOT NULL DEFAULT '20% OFF Total Bill',
+    discount_code TEXT NOT NULL,
+    discount_percent INTEGER NOT NULL DEFAULT 20,
+    token_id INTEGER,
+    monad_tx_hash TEXT,
+    nft_image_url TEXT,
+    status TEXT NOT NULL DEFAULT 'ACTIVE', -- 'ACTIVE', 'REDEEMED', 'EXPIRED'
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Disable RLS for MVP / demo testing so client app can read/write all tables
+ALTER TABLE IF EXISTS public.venues DISABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.reviews DISABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.event_requests DISABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.users DISABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.soft_interest DISABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.coupons DISABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.communities DISABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.community_members DISABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.comments DISABLE ROW LEVEL SECURITY;
+
+GRANT ALL ON public.venues TO anon, authenticated, service_role;
+GRANT ALL ON public.reviews TO anon, authenticated, service_role;
+GRANT ALL ON public.event_requests TO anon, authenticated, service_role;
+GRANT ALL ON public.users TO anon, authenticated, service_role;
+GRANT ALL ON public.soft_interest TO anon, authenticated, service_role;
+GRANT ALL ON public.coupons TO anon, authenticated, service_role;
+GRANT ALL ON public.communities TO anon, authenticated, service_role;
+GRANT ALL ON public.community_members TO anon, authenticated, service_role;
+GRANT ALL ON public.comments TO anon, authenticated, service_role;
