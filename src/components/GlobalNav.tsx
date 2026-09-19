@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { WalletButton } from '@/components/WalletButton';
+import { Compass, Calendar, Users, User, Sparkles } from 'lucide-react';
 
 export function GlobalNav() {
   const pathname = usePathname();
@@ -11,42 +12,59 @@ export function GlobalNav() {
   if (pathname === '/') return null;
 
   const tabs = [
-    { name: 'Discovery', href: '/home' },
-    { name: 'Community', href: '/communities' },
-    { name: 'Profile', href: '/profile' },
+    { name: 'Feed', href: '/home', icon: Compass },
+    { name: 'Trips & Escrow', href: '/events', icon: Calendar },
+    { name: 'Communities', href: '/communities', icon: Users },
+    { name: 'Profile', href: '/profile', icon: User },
   ];
 
   return (
-    <nav className="border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/home" className="font-mono font-bold text-xl tracking-tighter hover:opacity-80 transition-opacity">
-          MONAD<span className="text-primary">.PWA</span>
+    <nav className="border-b border-neutral-150 bg-white/85 backdrop-blur-md sticky top-0 z-50">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
+        {/* Season Mix Editorial App Logo */}
+        <Link href="/home" className="flex items-center gap-2 group">
+          <div className="w-8 h-8 rounded-full bg-neutral-900 flex items-center justify-center text-white font-bold text-xs shadow-sm group-hover:scale-105 transition-transform">
+            F
+          </div>
+          <div className="flex flex-col">
+            <span className="font-display italic font-bold text-xl sm:text-2xl tracking-tight text-neutral-900 leading-none">
+              FoMo<span className="text-primary not-italic font-black ml-0.5">.</span>
+            </span>
+            <span className="text-[9px] font-semibold text-neutral-400 uppercase tracking-widest leading-none mt-0.5">
+              SEASON VIBES
+            </span>
+          </div>
         </Link>
 
-        {/* Desktop Tabs (Hidden on Mobile) */}
-        <div className="hidden md:flex items-center gap-8">
+
+        {/* Desktop Tabs */}
+        <div className="hidden md:flex items-center gap-1 bg-neutral-100/80 p-1 rounded-full border border-neutral-200/60">
           {tabs.map((tab) => {
             const isActive = pathname.startsWith(tab.href);
+            const Icon = tab.icon;
             return (
               <Link 
                 key={tab.name} 
                 href={tab.href}
-                className={`text-sm font-bold transition-colors ${
-                  isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+                className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                  isActive 
+                    ? 'bg-white text-neutral-950 shadow-sm' 
+                    : 'text-neutral-500 hover:text-neutral-900'
                 }`}
               >
-                {tab.name}
+                <Icon size={14} className={isActive ? 'text-primary' : ''} />
+                <span>{tab.name}</span>
               </Link>
             );
           })}
         </div>
 
-        {/* Wallet Button */}
-        <div className="flex items-center gap-4">
-          <WalletButton className="!px-4 !py-2 !text-sm !rounded-lg !shadow-none" showIcon={false} />
+        {/* Wallet & Quick Action */}
+        <div className="flex items-center gap-2">
+          <WalletButton className="!px-3.5 !py-1.5 !text-xs !rounded-full !shadow-sm" showIcon={false} />
         </div>
       </div>
     </nav>
   );
 }
+

@@ -66,7 +66,7 @@ export function InstallPWA() {
           className="bg-card border border-border text-foreground hover:bg-border transition-colors font-bold px-6 py-3 rounded-xl flex items-center justify-center gap-2"
         >
           <Download size={18} />
-          Install Monad PWA
+          Install FoMo App
         </button>
       )}
     </div>

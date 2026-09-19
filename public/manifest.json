@@ -1,11 +1,11 @@
 {
-  "name": "Monad Web3 PWA",
-  "short_name": "MonadPWA",
-  "description": "A progressive web app built on Monad",
-  "start_url": "/",
+  "name": "FoMo — Discover the Vibe",
+  "short_name": "FoMo",
+  "description": "Curated social venue discovery and verified NFT rewards",
+  "start_url": "/home",
   "display": "standalone",
-  "background_color": "#050505",
-  "theme_color": "#ccff00",
+  "background_color": "#faf8f5",
+  "theme_color": "#ff533d",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",

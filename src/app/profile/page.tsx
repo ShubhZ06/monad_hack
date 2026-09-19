@@ -52,116 +52,132 @@ export default function ProfilePage() {
   const username = address ? generateUsername(address) : 'Guest_User';
 
   return (
-    <div className="min-h-screen bg-background text-foreground pb-24">
-
-
-      <main className="max-w-3xl mx-auto px-6 pt-12">
-        {/* Profile Header */}
-        <div className="flex flex-col items-center text-center mb-12 relative">
-          <div className="w-32 h-32 rounded-full bg-border border-4 border-background overflow-hidden relative mb-4 shadow-[0_0_30px_rgba(204,255,0,0.1)]">
-            <div className="absolute inset-0 bg-gradient-to-tr from-primary/40 to-background flex items-center justify-center text-4xl">
-              👽
+    <div className="min-h-screen bg-[#faf8f5] text-[#1a1a1a] pb-28">
+      <main className="max-w-xl mx-auto px-4 sm:px-6 pt-6 sm:pt-10">
+        {/* Instagram-style Profile Header */}
+        <div className="bg-white border border-[#eee7dc] rounded-2xl sm:rounded-3xl p-6 mb-5 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+          <div className="flex items-center gap-5 sm:gap-6">
+            {/* Story Avatar */}
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full season-story-ring p-[3px] shrink-0 relative">
+              <div className="w-full h-full rounded-full bg-white flex items-center justify-center shadow-inner">
+                <Sparkles size={32} className="text-primary fill-primary/20" />
+              </div>
             </div>
-            <button className="absolute bottom-2 right-2 bg-background p-1.5 rounded-full border border-border text-primary hover:bg-primary hover:text-primary-foreground transition-colors">
-              <Camera size={16} />
-            </button>
+
+            {/* Profile Info */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-1.5 mb-1">
+                <h1 className="font-display italic font-bold text-xl sm:text-2xl text-neutral-900 truncate">
+                  @{username}
+                </h1>
+                <span className="w-4 h-4 rounded-full bg-primary text-white flex items-center justify-center shrink-0">
+                  <Check size={10} className="stroke-[3]" />
+                </span>
+              </div>
+
+              <p className="text-xs text-neutral-500 mb-3 truncate">
+                {address ? `${address.slice(0, 8)}...${address.slice(-6)}` : 'Wallet not connected'}
+              </p>
+
+              {/* Badges Pill */}
+              <div className="flex flex-wrap gap-1.5 text-[11px]">
+                <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full font-semibold flex items-center gap-1">
+                  <ShieldCheck size={12} /> ID Verified
+                </span>
+                <span className="bg-[#f4f0e8] text-neutral-700 border border-[#eee7dc] px-2.5 py-0.5 rounded-full font-medium">
+                  FoMo Club Member
+                </span>
+              </div>
+            </div>
           </div>
-          
-          <h1 className="text-3xl font-bold font-mono tracking-tight mb-2">
-            @{username}
-          </h1>
-          
-          <div className="flex items-center gap-2 text-sm">
-            <span className="bg-green-500/20 text-green-400 border border-green-500/30 px-3 py-1 rounded-full font-bold flex items-center gap-1">
-              <ShieldCheck size={14} /> ID Verified
-            </span>
-            <span className="text-muted-foreground bg-secondary px-3 py-1 rounded-full border border-border">
-              Monad Community
-            </span>
+
+          {/* Instagram Stats Row */}
+          <div className="grid grid-cols-3 gap-2 text-center pt-5 mt-5 border-t border-[#f4f0e8]">
+            <div className="flex flex-col">
+              <span className="font-bold text-base text-neutral-900">12</span>
+              <span className="text-[11px] text-neutral-500">Check-ins</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold text-base text-neutral-900">{BADGES.length}</span>
+              <span className="text-[11px] text-neutral-500">SBT Badges</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold text-base text-neutral-900">{coupons.length}</span>
+              <span className="text-[11px] text-neutral-500">Coupons</span>
+            </div>
           </div>
         </div>
 
         {/* Verification Banner */}
-        <div className="bg-card border border-border rounded-2xl p-5 mb-10 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="bg-primary/20 text-primary p-3 rounded-xl">
-              <ShieldCheck size={24} />
+        <div className="bg-white border border-[#eee7dc] rounded-2xl p-4 sm:p-5 mb-5 shadow-sm flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+              <ShieldCheck size={22} />
             </div>
             <div>
-              <h3 className="font-bold">College ID Verified</h3>
-              <p className="text-sm text-muted-foreground">You have access to exclusive private events and VIP venue rewards.</p>
+              <h3 className="font-bold text-xs sm:text-sm text-neutral-900">Campus & Identity Verified</h3>
+              <p className="text-[11px] text-neutral-500">Exclusive access to private events & VIP merchant discount perks.</p>
             </div>
           </div>
-          <button className="text-muted-foreground hover:text-foreground">
-            <Settings size={20} />
+          <button className="text-neutral-400 hover:text-neutral-700 p-1 cursor-pointer">
+            <Settings size={18} />
           </button>
         </div>
 
         {/* Monad NFT Discount Coupons Section */}
-        <div className="mb-12">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold flex items-center gap-2">
-              <Gift className="text-primary" /> 
-              NFT Discount Coupons
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-3.5 px-1">
+            <h2 className="font-display font-bold text-lg text-neutral-900 flex items-center gap-2">
+              <Gift className="text-primary" size={18} /> 
+              <span>My Claimed NFT Coupons</span>
             </h2>
-            <span className="bg-primary/20 text-primary border border-primary/30 text-xs font-black px-2.5 py-1 rounded-full">
+            <span className="bg-primary/10 text-primary text-xs font-semibold px-2.5 py-0.5 rounded-full">
               {coupons.length} Active
             </span>
           </div>
 
           {coupons.length === 0 ? (
-            <div className="bg-card border border-border rounded-2xl p-8 text-center">
-              <Gift size={32} className="text-muted-foreground mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">
-                No coupons yet. Visit a cafe, leave a review from the Discovery feed, and claim a 20% discount NFT!
+            <div className="bg-white border border-[#eee7dc] rounded-2xl p-8 text-center shadow-sm">
+              <Gift size={28} className="text-neutral-300 mx-auto mb-2" />
+              <h4 className="font-bold text-neutral-800 text-sm mb-1">No coupons in your wallet yet</h4>
+              <p className="text-xs text-neutral-500 max-w-xs mx-auto">
+                Visit any cafe on the feed, leave a verified review, and mint a 20% discount coupon NFT instantly.
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               {coupons.map((coupon) => {
                 const isCopied = copiedId === coupon.id;
                 return (
                   <div
                     key={coupon.id}
-                    className="bg-card border border-primary/40 rounded-2xl p-5 shadow-[0_0_20px_rgba(204,255,0,0.06)] flex flex-col justify-between"
+                    className="bg-white border border-[#eee7dc] hover:border-primary/40 rounded-2xl p-4 shadow-sm flex flex-col justify-between transition-all"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-[10px] font-mono font-black text-primary uppercase">
+                        <span className="text-[10px] font-mono font-bold text-primary uppercase">
                           NFT #{coupon.token_id}
                         </span>
-                        <span className="text-[10px] bg-green-500/10 text-green-400 border border-green-500/30 px-2 py-0.5 rounded-full font-bold">
+                        <span className="text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full font-bold">
                           {coupon.status}
                         </span>
                       </div>
 
-                      <h4 className="font-bold text-base text-foreground mb-1">{coupon.venue_name}</h4>
-                      <p className="text-sm font-black text-primary mb-3">{coupon.discount_title}</p>
+                      <h4 className="font-display font-bold text-sm text-neutral-900 mb-0.5">{coupon.venue_name}</h4>
+                      <p className="text-xs font-bold text-primary mb-3">{coupon.discount_title}</p>
                     </div>
 
-                    <div className="space-y-2">
-                      <div className="bg-background border border-dashed border-primary/50 rounded-xl p-2.5 flex items-center justify-between">
-                        <span className="font-mono font-bold text-xs text-primary">{coupon.discount_code}</span>
-                        <button
-                          onClick={() => handleCopy(coupon.id, coupon.discount_code)}
-                          className="bg-secondary hover:bg-border text-xs px-2.5 py-1 rounded-md font-bold flex items-center gap-1 transition-colors"
-                        >
-                          {isCopied ? <Check size={12} /> : <Copy size={12} />}
-                          {isCopied ? 'Copied' : 'Copy'}
-                        </button>
-                      </div>
-
-                      {coupon.monad_tx_hash && (
-                        <a
-                          href={`https://testnet.monadexplorer.com/tx/${coupon.monad_tx_hash}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-[10px] text-muted-foreground hover:text-primary flex items-center justify-end gap-1 font-mono transition-colors"
-                        >
-                          <span>Monad Explorer</span>
-                          <ExternalLink size={10} />
-                        </a>
-                      )}
+                    <div className="pt-2 border-t border-[#f4f0e8] flex items-center justify-between">
+                      <span className="font-mono text-xs font-bold text-neutral-800">
+                        {coupon.discount_code}
+                      </span>
+                      <button
+                        onClick={() => handleCopy(coupon.id, coupon.discount_code)}
+                        className="bg-neutral-900 hover:bg-neutral-800 text-white text-[11px] font-semibold px-3 py-1.5 rounded-full flex items-center gap-1 transition-colors cursor-pointer"
+                      >
+                        {isCopied ? <Check size={12} /> : <Copy size={12} />}
+                        <span>{isCopied ? 'Copied' : 'Copy'}</span>
+                      </button>
                     </div>
                   </div>
                 );
@@ -170,28 +186,36 @@ export default function ProfilePage() {
           )}
         </div>
 
-        {/* Soulbound Badges Section */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-            <Award className="text-primary" /> 
-            Soulbound Badges
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {/* Soulbound Attendance Badges (SBT) */}
+        <div>
+          <div className="flex items-center justify-between mb-3.5 px-1">
+            <h2 className="font-display font-bold text-lg text-neutral-900 flex items-center gap-2">
+              <Award className="text-primary" size={18} />
+              <span>Soulbound Attendance Badges</span>
+            </h2>
+            <span className="text-xs text-neutral-400 font-semibold">{BADGES.length} Badges</span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {BADGES.map((badge) => (
-              <div key={badge.id} className="bg-background border border-border rounded-2xl p-4 flex flex-col items-center text-center hover:border-primary/50 transition-colors">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/30 to-background border border-primary/20 mb-3 flex items-center justify-center">
-                  <Award size={28} className="text-primary" />
+              <div
+                key={badge.id}
+                className="bg-white border border-[#eee7dc] rounded-2xl p-4 flex flex-col items-center text-center shadow-sm"
+              >
+                <div className="w-12 h-12 rounded-full season-story-ring p-[2px] mb-2 flex items-center justify-center">
+                  <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
+                    <Award size={20} className="text-primary" />
+                  </div>
                 </div>
-                <h4 className="font-bold text-sm mb-1">{badge.name}</h4>
-                <p className="text-xs text-muted-foreground">{badge.date}</p>
-                <div className="mt-2 text-[10px] uppercase font-bold tracking-wider text-primary bg-primary/10 px-2 py-1 rounded-md">
+                <h4 className="font-bold text-xs text-neutral-900 mb-0.5 line-clamp-1">{badge.name}</h4>
+                <p className="text-[10px] text-neutral-400">{badge.date}</p>
+                <span className="mt-2 text-[9px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded-full">
                   {badge.type}
-                </div>
+                </span>
               </div>
             ))}
           </div>
         </div>
-
       </main>
     </div>
   );

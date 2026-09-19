@@ -87,45 +87,48 @@ export function VenueReviewsModal({
     : false;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl bg-card border border-border/80 shadow-[0_0_60px_rgba(0,0,0,0.85)] rounded-3xl overflow-hidden max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-2xl bg-white border border-[#eee7dc] shadow-2xl rounded-t-[32px] sm:rounded-3xl overflow-hidden max-h-[90vh] flex flex-col">
+        {/* iOS Grab Bar for mobile */}
+        <div className="w-12 h-1 bg-neutral-300 rounded-full mx-auto mt-3 sm:hidden shrink-0" />
+
         {/* Header with Venue Cover */}
-        <div className="relative h-44 sm:h-52 overflow-hidden bg-muted shrink-0">
+        <div className="relative h-40 sm:h-48 overflow-hidden bg-neutral-100 shrink-0">
           {venue.image_url ? (
             <img src={venue.image_url} alt={venue.name} className="w-full h-full object-cover" />
           ) : (
-            <div className="w-full h-full bg-secondary flex items-center justify-center text-muted-foreground">
+            <div className="w-full h-full bg-neutral-100 flex items-center justify-center text-neutral-400">
               <MapPin size={32} />
             </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-background/80 backdrop-blur text-muted-foreground hover:text-foreground flex items-center justify-center transition-colors border border-border z-10"
+            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/90 backdrop-blur text-neutral-700 hover:text-neutral-900 flex items-center justify-center transition-colors shadow-sm cursor-pointer z-10"
           >
-            <X size={18} />
+            <X size={16} />
           </button>
 
           {/* Venue Info Overlay */}
-          <div className="absolute bottom-4 left-6 right-6 flex items-end justify-between gap-4">
+          <div className="absolute bottom-4 left-5 right-5 flex items-end justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="bg-primary text-primary-foreground px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider">
+                <span className="bg-primary text-white px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
                   {venue.type}
                 </span>
                 {venue.vibe_rating && (
-                  <span className="bg-background/80 backdrop-blur border border-border px-2.5 py-0.5 rounded-full text-[10px] font-bold text-foreground flex items-center gap-1">
-                    <Flame size={12} className="text-orange-500" />
+                  <span className="bg-white/90 backdrop-blur px-2.5 py-0.5 rounded-full text-[10px] font-bold text-neutral-900 flex items-center gap-1 shadow-sm">
+                    <Flame size={12} className="text-primary fill-primary" />
                     {venue.vibe_rating}
                   </span>
                 )}
               </div>
-              <h2 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight line-clamp-1">
+              <h2 className="font-display font-bold text-2xl sm:text-3xl text-white tracking-tight line-clamp-1">
                 {venue.name}
               </h2>
-              <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+              <p className="text-xs text-white/80 flex items-center gap-1 mt-0.5">
                 <MapPin size={12} /> {venue.address}
               </p>
             </div>
@@ -133,13 +136,13 @@ export function VenueReviewsModal({
         </div>
 
         {/* Rating Stats Bar & Filter Tabs */}
-        <div className="px-6 py-3.5 border-b border-border bg-background/60 flex items-center justify-between flex-wrap gap-3">
+        <div className="px-5 sm:px-6 py-3 border-b border-[#eee7dc] bg-[#faf8f5] flex items-center justify-between flex-wrap gap-2.5">
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1 bg-primary/10 border border-primary/20 px-2.5 py-1 rounded-xl">
-              <Star size={16} className="text-primary fill-primary" />
-              <span className="font-mono font-black text-sm text-primary">{avgRating}</span>
+            <div className="flex items-center gap-1 bg-white border border-[#eee7dc] px-2.5 py-1 rounded-full shadow-sm">
+              <Star size={14} className="text-amber-400 fill-amber-400" />
+              <span className="font-mono font-bold text-xs text-neutral-900">{avgRating}</span>
             </div>
-            <span className="text-xs font-semibold text-muted-foreground">
+            <span className="text-xs font-semibold text-neutral-500">
               {reviews.length} community {reviews.length === 1 ? 'review' : 'reviews'}
             </span>
           </div>
@@ -148,20 +151,20 @@ export function VenueReviewsModal({
           <div className="flex items-center gap-1.5">
             <button
               onClick={() => setFilter('ALL')}
-              className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors ${
+              className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
                 filter === 'ALL'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-secondary text-muted-foreground hover:text-foreground'
+                  ? 'bg-neutral-900 text-white shadow-sm'
+                  : 'bg-white border border-[#eee7dc] text-neutral-600 hover:bg-neutral-50'
               }`}
             >
               All ({reviews.length})
             </button>
             <button
               onClick={() => setFilter('PHOTOS')}
-              className={`px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1 transition-colors ${
+              className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer ${
                 filter === 'PHOTOS'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-secondary text-muted-foreground hover:text-foreground'
+                  ? 'bg-neutral-900 text-white shadow-sm'
+                  : 'bg-white border border-[#eee7dc] text-neutral-600 hover:bg-neutral-50'
               }`}
             >
               <Camera size={12} />
@@ -169,25 +172,25 @@ export function VenueReviewsModal({
             </button>
             <button
               onClick={() => setFilter('INSANE')}
-              className={`px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1 transition-colors ${
+              className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer ${
                 filter === 'INSANE'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-secondary text-muted-foreground hover:text-foreground'
+                  ? 'bg-neutral-900 text-white shadow-sm'
+                  : 'bg-white border border-[#eee7dc] text-neutral-600 hover:bg-neutral-50'
               }`}
             >
-              <Flame size={12} className="text-orange-500" />
+              <Flame size={12} className="text-primary fill-primary" />
               Insane
             </button>
           </div>
         </div>
 
         {/* Reviews Feed */}
-        <div className="p-6 overflow-y-auto space-y-4 flex-1 scrollbar-thin">
+        <div className="p-5 sm:p-6 overflow-y-auto space-y-3.5 flex-1 no-scrollbar">
           {filteredReviews.length === 0 ? (
             <div className="py-12 text-center flex flex-col items-center justify-center gap-2">
-              <MessageSquare size={32} className="text-muted-foreground" />
-              <p className="font-bold text-foreground text-sm">No reviews matching this filter</p>
-              <p className="text-xs text-muted-foreground">Be the first to share a review with photo!</p>
+              <MessageSquare size={32} className="text-neutral-300" />
+              <p className="font-bold text-neutral-800 text-sm">No reviews matching this filter</p>
+              <p className="text-xs text-neutral-500">Be the first to share a review with photo!</p>
             </div>
           ) : (
             filteredReviews.map((review) => {
@@ -197,34 +200,36 @@ export function VenueReviewsModal({
               return (
                 <div
                   key={review.id}
-                  className={`bg-background/90 border rounded-2xl p-4.5 transition-all flex flex-col gap-3 ${
+                  className={`bg-[#fbf9f5] border rounded-2xl p-4 transition-all flex flex-col gap-2.5 ${
                     isOwnReview
-                      ? 'border-primary/50 shadow-[0_0_15px_rgba(204,255,0,0.1)]'
-                      : 'border-border/80'
+                      ? 'border-primary/40 bg-orange-50/20'
+                      : 'border-[#eee7dc]'
                   }`}
                 >
                   {/* Top: Avatar, Name, Rating & Time */}
                   <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2.5">
                       {/* Avatar */}
-                      <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-primary/30 to-primary/80 border border-primary/40 flex items-center justify-center font-bold text-xs text-background shrink-0">
-                        {reviewerName.slice(0, 2).toUpperCase()}
+                      <div className="w-8 h-8 rounded-full season-story-ring p-[1.5px] shrink-0">
+                        <div className="w-full h-full rounded-full bg-white flex items-center justify-center font-bold text-[10px] text-neutral-800">
+                          {reviewerName.slice(0, 2).toUpperCase()}
+                        </div>
                       </div>
                       <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-sm text-foreground">@{reviewerName}</span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-bold text-xs text-neutral-900">@{reviewerName}</span>
                           {isOwnReview && (
-                            <span className="text-[10px] bg-primary/20 text-primary border border-primary/30 px-2 py-0.2 rounded-full font-bold">
+                            <span className="text-[9px] bg-primary/10 text-primary px-1.5 py-0.2 rounded-full font-bold">
                               You
                             </span>
                           )}
                           {review.vibe_tag && (
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded-md border border-primary/20">
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-1.5 py-0.2 rounded-md">
                               {review.vibe_tag}
                             </span>
                           )}
                         </div>
-                        <span className="text-[11px] font-mono text-muted-foreground flex items-center gap-1">
+                        <span className="text-[10px] text-neutral-400 flex items-center gap-1 mt-0.5">
                           <Clock size={10} /> {timeAgo(review.created_at)} • {review.wallet_address.slice(0, 6)}...{review.wallet_address.slice(-4)}
                         </span>
                       </div>
@@ -235,11 +240,11 @@ export function VenueReviewsModal({
                       {[1, 2, 3, 4, 5].map((star) => (
                         <Star
                           key={star}
-                          size={13}
+                          size={12}
                           className={`${
                             (review.rating || 5) >= star
-                              ? 'text-primary fill-primary'
-                              : 'text-muted-foreground/30'
+                              ? 'text-amber-400 fill-amber-400'
+                              : 'text-neutral-200'
                           }`}
                         />
                       ))}
@@ -247,24 +252,19 @@ export function VenueReviewsModal({
                   </div>
 
                   {/* Comment Text */}
-                  <p className="text-sm text-foreground/90 leading-relaxed pl-1">
-                    {review.comment}
+                  <p className="text-xs text-neutral-700 leading-relaxed pl-0.5">
+                    "{review.comment}"
                   </p>
 
-                  {/* Photo Attachment if present */}
+                  {/* Review Photo Attachment */}
                   {review.image_url && (
-                    <div
-                      onClick={() => setActivePhoto(review.image_url)}
-                      className="rounded-xl overflow-hidden border border-border max-w-xs h-40 group cursor-pointer bg-muted relative"
-                    >
+                    <div className="mt-1 rounded-xl overflow-hidden border border-[#eee7dc] max-h-56 bg-neutral-100">
                       <img
                         src={review.image_url}
-                        alt="Review photo"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        alt="User review attachment"
+                        className="w-full h-full object-cover hover:scale-102 transition-transform duration-300 cursor-pointer"
+                        onClick={() => setActivePhoto(review.image_url)}
                       />
-                      <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs font-bold transition-opacity">
-                        🔍 Click to Enlarge
-                      </div>
                     </div>
                   )}
                 </div>
@@ -273,39 +273,46 @@ export function VenueReviewsModal({
           )}
         </div>
 
-        {/* Modal Footer */}
-        <div className="p-4 border-t border-border bg-background/50 flex items-center justify-between">
-          <span className="text-xs text-muted-foreground font-mono">
-            {reviews.length} verified check-in {reviews.length === 1 ? 'review' : 'reviews'}
-          </span>
+        {/* Footer with Write Review Action */}
+        <div className="p-4 border-t border-[#eee7dc] bg-[#faf8f5] flex items-center justify-between gap-3">
+          <div className="text-xs">
+            <p className="font-bold text-neutral-900">
+              {hasUserReviewed ? 'You reviewed this venue' : 'Visited this venue?'}
+            </p>
+            <p className="text-[11px] text-neutral-500">
+              {hasUserReviewed
+                ? 'Update your feedback anytime'
+                : 'Share your vibe & earn a 20% Monad NFT coupon'}
+            </p>
+          </div>
+
           <button
-            onClick={onClose}
-            className="bg-secondary hover:bg-border text-secondary-foreground font-bold px-4 py-2 rounded-xl text-xs transition-colors"
+            onClick={() => {
+              onClose();
+              onOpenWriteReview(venue);
+            }}
+            className="bg-neutral-900 hover:bg-neutral-800 text-white font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer active:scale-95 whitespace-nowrap"
           >
-            Close
+            <Sparkles size={13} className="text-primary" />
+            <span>{hasUserReviewed ? 'Edit My Review' : 'Write Review'}</span>
           </button>
         </div>
-
-        {/* Photo Lightbox Preview */}
-        {activePhoto && (
-          <div
-            onClick={() => setActivePhoto(null)}
-            className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 animate-in fade-in"
-          >
-            <button
-              onClick={() => setActivePhoto(null)}
-              className="absolute top-4 right-4 text-white hover:text-primary w-10 h-10 rounded-full bg-white/10 flex items-center justify-center"
-            >
-              <X size={24} />
-            </button>
-            <img
-              src={activePhoto}
-              alt="Enlarged review photo"
-              className="max-w-full max-h-[85vh] rounded-2xl object-contain border border-white/20 shadow-2xl"
-            />
-          </div>
-        )}
       </div>
+
+      {/* Lightbox for Enlarged Photo */}
+      {activePhoto && (
+        <div
+          className="fixed inset-0 z-60 bg-black/90 flex items-center justify-center p-4 cursor-pointer"
+          onClick={() => setActivePhoto(null)}
+        >
+          <img
+            src={activePhoto}
+            alt="Enlarged review photo"
+            className="max-w-full max-h-[90vh] object-contain rounded-2xl"
+          />
+        </div>
+      )}
     </div>
   );
 }
+

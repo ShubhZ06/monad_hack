@@ -62,11 +62,11 @@ const PHOTO_PRESETS = [
 ];
 
 const RATING_DESCRIPTIONS: Record<number, string> = {
-  1: 'Mid 😐',
-  2: 'Decent 👍',
-  3: 'Worth it ✨',
-  4: 'Fire 🔥',
-  5: 'Insane! 🚀',
+  1: 'Mid',
+  2: 'Decent',
+  3: 'Worth it',
+  4: 'Exceptional',
+  5: 'Outstanding',
 };
 
 export function ReviewModal({
@@ -210,83 +210,86 @@ export function ReviewModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg bg-card border border-border/80 shadow-[0_0_50px_rgba(0,0,0,0.8)] rounded-3xl overflow-hidden max-h-[92vh] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-lg bg-white border border-neutral-200 shadow-2xl rounded-t-[32px] sm:rounded-3xl overflow-hidden max-h-[92vh] flex flex-col">
+        {/* iOS Grab Handle for Mobile */}
+        <div className="w-12 h-1 bg-neutral-300 rounded-full mx-auto mt-3 sm:hidden shrink-0" />
+
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-background/50">
+        <div className="flex items-center justify-between px-5 sm:px-6 py-3.5 border-b border-neutral-150 bg-white">
           <div className="flex items-center gap-3 min-w-0">
             <img
               src={venue.image_url}
               alt={venue.name}
-              className="w-10 h-10 rounded-xl object-cover border border-border shrink-0"
+              className="w-10 h-10 rounded-xl object-cover border border-neutral-200 shrink-0"
             />
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <span className="text-[10px] uppercase font-mono font-bold text-green-400">At Venue</span>
+                <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                <span className="text-[10px] uppercase font-mono font-bold text-emerald-600">Verified Location</span>
               </div>
-              <h3 className="font-bold text-base text-foreground truncate">{venue.name}</h3>
+              <h3 className="font-bold text-base text-neutral-900 truncate">{venue.name}</h3>
             </div>
           </div>
 
           <button
             onClick={handleResetAndClose}
-            className="w-8 h-8 rounded-full bg-secondary hover:bg-border text-muted-foreground hover:text-foreground flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-500 hover:text-neutral-900 flex items-center justify-center transition-colors cursor-pointer"
           >
-            <X size={18} />
+            <X size={16} />
           </button>
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 overflow-y-auto space-y-6 scrollbar-thin flex-1">
+        <div className="p-5 sm:p-6 overflow-y-auto space-y-5 no-scrollbar flex-1">
           {successData ? (
             /* SUCCESS REWARD SCREEN */
-            <div className="py-4 flex flex-col items-center text-center space-y-5 animate-in zoom-in-95 duration-200">
-              <div className="w-16 h-16 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center text-primary shadow-[0_0_30px_rgba(204,255,0,0.4)]">
+            <div className="py-4 flex flex-col items-center text-center space-y-4 animate-in zoom-in-95 duration-200">
+              <div className="w-16 h-16 rounded-full bg-emerald-50 border-2 border-emerald-500 flex items-center justify-center text-emerald-600 shadow-sm">
                 <CheckCircle2 size={36} />
               </div>
 
               <div>
-                <h3 className="text-2xl font-black tracking-tight text-foreground">
-                  {successData.coupon ? 'Review Posted & NFT Claimed! 🎉' : 'Review Updated! ✨'}
+                <h3 className="text-xl sm:text-2xl font-black tracking-tight text-neutral-900">
+                  {successData.coupon ? 'Review Posted & NFT Claimed!' : 'Review Updated!'}
                 </h3>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-xs sm:text-sm text-neutral-500 mt-1 max-w-sm mx-auto">
                   {successData.coupon
                     ? 'Your review is live on the discovery feed and your Monad NFT coupon is ready.'
                     : 'Your review has been updated. (Limit: 1 discount coupon per venue to prevent farming).'}
                 </p>
               </div>
 
-              {/* Claimed Monad NFT Coupon Card (Only if new coupon issued) */}
+              {/* Claimed Monad NFT Coupon Card */}
               {successData.coupon ? (
-                <div className="w-full bg-gradient-to-b from-primary/15 via-card to-background border-2 border-primary/50 rounded-2xl p-5 text-left relative overflow-hidden shadow-[0_0_30px_rgba(204,255,0,0.15)]">
+                <div className="w-full bg-gradient-to-b from-orange-50 via-white to-white border-2 border-primary/40 rounded-2xl p-4 sm:p-5 text-left relative overflow-hidden shadow-sm">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="bg-primary text-primary-foreground text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">
+                    <span className="bg-primary text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">
                       Monad Testnet NFT #{successData.coupon.token_id}
                     </span>
-                    <span className="text-xs font-mono text-muted-foreground flex items-center gap-1">
+                    <span className="text-xs font-mono text-neutral-500 flex items-center gap-1">
                       <Gift size={12} className="text-primary" /> Verified Reward
                     </span>
                   </div>
 
-                  <h4 className="text-xl font-extrabold text-foreground mb-1">
+                  <h4 className="text-lg sm:text-xl font-extrabold text-neutral-900 mb-1">
                     {successData.coupon.discount_title}
                   </h4>
-                  <p className="text-xs text-muted-foreground mb-4">
-                    Valid for all food & beverages at <span className="text-foreground font-semibold">{venue.name}</span>
+                  <p className="text-xs text-neutral-500 mb-4">
+                    Valid for all food & beverages at <span className="text-neutral-800 font-semibold">{venue.name}</span>
                   </p>
 
                   {/* Coupon Voucher Code Box */}
-                  <div className="bg-background/90 border border-dashed border-primary/60 rounded-xl p-3 flex items-center justify-between mb-3">
+                  <div className="bg-white border border-dashed border-primary/60 rounded-xl p-3 flex items-center justify-between mb-3 shadow-inner">
                     <div>
-                      <span className="text-[10px] uppercase font-mono text-muted-foreground block">Voucher Code</span>
+                      <span className="text-[10px] uppercase font-mono text-neutral-400 block">Voucher Code</span>
                       <span className="font-mono font-bold text-base text-primary tracking-widest">
                         {successData.coupon.discount_code}
                       </span>
                     </div>
                     <button
                       onClick={() => handleCopyCode(successData.coupon.discount_code)}
-                      className="bg-secondary hover:bg-primary hover:text-primary-foreground text-xs font-bold px-3 py-2 rounded-lg flex items-center gap-1.5 transition-colors"
+                      className="bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold px-3 py-2 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
                     >
                       {copiedCode ? <Check size={14} /> : <Copy size={14} />}
                       {copiedCode ? 'Copied' : 'Copy'}
@@ -299,7 +302,7 @@ export function ReviewModal({
                       href={`https://testnet.monadexplorer.com/tx/${successData.coupon.monad_tx_hash}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-[11px] text-muted-foreground hover:text-primary flex items-center gap-1 font-mono transition-colors"
+                      className="text-[11px] text-neutral-400 hover:text-primary flex items-center gap-1 font-mono transition-colors"
                     >
                       <span>Tx: {successData.coupon.monad_tx_hash.slice(0, 10)}...{successData.coupon.monad_tx_hash.slice(-8)}</span>
                       <ExternalLink size={10} />
@@ -307,46 +310,45 @@ export function ReviewModal({
                   )}
                 </div>
               ) : (
-                /* Already claimed banner (anti-farming info) */
-                <div className="w-full bg-secondary/80 border border-border rounded-2xl p-4 text-left space-y-2">
+                <div className="w-full bg-neutral-50 border border-neutral-200 rounded-2xl p-4 text-left space-y-1.5">
                   <div className="flex items-center gap-2 text-primary font-bold text-xs">
-                    <CheckCircle2 size={16} /> 1 NFT Coupon Per Venue Rule
+                    <CheckCircle2 size={15} /> 1 NFT Coupon Per Venue Rule
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    You already have a valid Monad 20% discount coupon in your wallet for <span className="text-foreground font-semibold">{venue.name}</span>. Duplicate coupon minting is prevented to protect venue partners.
+                  <p className="text-xs text-neutral-500 leading-relaxed">
+                    You already have a valid Monad 20% discount coupon in your wallet for <span className="text-neutral-800 font-semibold">{venue.name}</span>. Duplicate coupon minting is prevented to protect venue partners.
                   </p>
                 </div>
               )}
 
               {/* Post Success Actions */}
-              <div className="flex gap-3 w-full pt-2">
+              <div className="flex gap-2.5 w-full pt-2">
                 <button
                   onClick={handleResetAndClose}
-                  className="flex-1 bg-secondary hover:bg-border text-secondary-foreground font-bold py-3 rounded-xl text-sm transition-colors"
+                  className="flex-1 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 font-semibold py-3 rounded-full text-xs transition-colors cursor-pointer"
                 >
-                  Back to Discovery
+                  Back to Feed
                 </button>
                 <button
                   onClick={() => {
                     handleResetAndClose();
                     onOpenCoupons();
                   }}
-                  className="flex-1 bg-primary text-primary-foreground hover:brightness-110 font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-1.5 shadow-[0_0_20px_rgba(204,255,0,0.3)] transition-all"
+                  className="flex-1 bg-neutral-900 text-white hover:bg-neutral-800 font-semibold py-3 rounded-full text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all cursor-pointer"
                 >
-                  <Gift size={16} />
-                  View in My Coupons
+                  <Gift size={14} />
+                  <span>View My Coupons</span>
                 </button>
               </div>
             </div>
           ) : (
             /* REVIEW COMPOSER FORM */
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Anti-Farming Rule Callout if editing/already claimed */}
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Anti-Farming Rule Callout if editing */}
               {isEditing && (
-                <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 flex items-center gap-2.5 text-xs text-amber-300">
-                  <ShieldAlert size={16} className="shrink-0 text-amber-400" />
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-center gap-2.5 text-xs text-amber-800">
+                  <ShieldAlert size={16} className="shrink-0 text-amber-600" />
                   <span>
-                    You already reviewed this venue. Submitting will update your review. (Limit: 1 coupon per venue to prevent coupon farming).
+                    You already reviewed this venue. Submitting will update your review. (Limit: 1 coupon per venue).
                   </span>
                 </div>
               )}
@@ -354,14 +356,14 @@ export function ReviewModal({
               {/* Proof of Location Status Banner */}
               <div className={`p-3 rounded-xl border flex items-center justify-between text-xs ${
                 isWithinRange
-                  ? 'bg-green-500/10 border-green-500/30 text-green-300'
-                  : 'bg-destructive/10 border-destructive/30 text-destructive'
+                  ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                  : 'bg-rose-50 border-rose-200 text-rose-800'
               }`}>
                 <div className="flex items-center gap-2">
                   {isWithinRange ? (
-                    <ShieldCheck size={16} className="text-green-400 shrink-0" />
+                    <ShieldCheck size={16} className="text-emerald-600 shrink-0" />
                   ) : (
-                    <ShieldAlert size={16} className="text-destructive shrink-0" />
+                    <ShieldAlert size={16} className="text-rose-600 shrink-0" />
                   )}
                   <div>
                     <span className="font-bold block">
@@ -370,21 +372,21 @@ export function ReviewModal({
                     <span className="text-[10px] opacity-85">
                       {isWithinRange
                         ? `Within ${venue.name} check-in boundary (${distanceMeters ?? 24}m, max 250m)`
-                        : `You are ${distanceMeters ? distanceMeters + 'm' : 'too far'} away. You cannot review from outside.`}
+                        : `You are ${distanceMeters ? distanceMeters + 'm' : 'too far'} away. Must be within 250m.`}
                     </span>
                   </div>
                 </div>
-                <span className={`text-[10px] font-mono font-black uppercase px-2 py-0.5 rounded-full shrink-0 ${
-                  isWithinRange ? 'bg-green-500/20 text-green-400' : 'bg-destructive/20 text-destructive'
+                <span className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-full shrink-0 ${
+                  isWithinRange ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
                 }`}>
                   {isWithinRange ? 'Eligible' : 'Blocked'}
                 </span>
               </div>
 
               {/* Star Rating Section */}
-              <div className="text-center space-y-2">
-                <label className="text-xs font-mono uppercase tracking-wider text-muted-foreground block">
-                  Overall Rating
+              <div className="text-center space-y-1.5 bg-neutral-50 py-3 rounded-2xl border border-neutral-150">
+                <label className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500 block">
+                  Tap to Rate
                 </label>
                 <div className="flex items-center justify-center gap-2">
                   {[1, 2, 3, 4, 5].map((star) => {
@@ -396,31 +398,31 @@ export function ReviewModal({
                         onClick={() => setRating(star)}
                         onMouseEnter={() => setHoverRating(star)}
                         onMouseLeave={() => setHoverRating(0)}
-                        className="p-1 text-2xl transition-transform hover:scale-125 focus:outline-none"
+                        className="p-1 transition-transform hover:scale-125 focus:outline-none cursor-pointer"
                       >
                         <Star
-                          size={32}
+                          size={28}
                           className={`${
                             active
-                              ? 'text-primary fill-primary drop-shadow-[0_0_8px_rgba(204,255,0,0.6)]'
-                              : 'text-muted-foreground/40'
+                              ? 'text-amber-400 fill-amber-400'
+                              : 'text-neutral-300'
                           } transition-colors`}
                         />
                       </button>
                     );
                   })}
                 </div>
-                <p className="text-sm font-bold text-primary tracking-wide">
+                <p className="text-xs font-bold text-neutral-800">
                   {RATING_DESCRIPTIONS[hoverRating || rating]}
                 </p>
               </div>
 
               {/* Vibe Tag Selector */}
-              <div className="space-y-2">
-                <label className="text-xs font-mono uppercase tracking-wider text-muted-foreground block">
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500 block">
                   Vibe Tag
                 </label>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5">
                   {VIBE_TAGS.map((tag) => {
                     const selected = vibeTag === tag.label;
                     const Icon = tag.icon;
@@ -429,13 +431,13 @@ export function ReviewModal({
                         key={tag.label}
                         type="button"
                         onClick={() => setVibeTag(tag.label)}
-                        className={`px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 border transition-all ${
+                        className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 border transition-all cursor-pointer ${
                           selected
-                            ? 'bg-primary text-primary-foreground border-primary shadow-[0_0_12px_rgba(204,255,0,0.3)]'
-                            : 'bg-background/80 border-border text-muted-foreground hover:text-foreground hover:border-border/80'
+                            ? 'bg-neutral-900 text-white border-neutral-900 shadow-sm'
+                            : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
                         }`}
                       >
-                        {Icon && <Icon size={12} className={selected ? 'text-primary-foreground' : tag.color} />}
+                        {Icon && <Icon size={12} className={selected ? 'text-white' : tag.color} />}
                         {tag.label}
                       </button>
                     );
@@ -444,16 +446,16 @@ export function ReviewModal({
               </div>
 
               {/* Photo Upload & Preview */}
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-mono uppercase tracking-wider text-muted-foreground block">
+                  <label className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500 block">
                     Attach Photo (Instagram Style)
                   </label>
                   {imageUrl && (
                     <button
                       type="button"
                       onClick={() => setImageUrl('')}
-                      className="text-[11px] text-destructive hover:underline"
+                      className="text-[11px] text-rose-500 hover:underline cursor-pointer"
                     >
                       Remove
                     </button>
@@ -461,26 +463,26 @@ export function ReviewModal({
                 </div>
 
                 {imageUrl ? (
-                  <div className="relative rounded-2xl overflow-hidden border border-border h-48 group bg-muted">
+                  <div className="relative rounded-2xl overflow-hidden border border-neutral-200 h-44 group bg-neutral-100">
                     <img src={imageUrl} alt="Review upload" className="w-full h-full object-cover" />
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-2 text-white font-bold text-xs transition-opacity"
+                      className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-2 text-white font-semibold text-xs transition-opacity cursor-pointer"
                     >
-                      <Camera size={18} /> Change Photo
+                      <Camera size={16} /> Change Photo
                     </button>
                   </div>
                 ) : (
                   <div
                     onClick={() => fileInputRef.current?.click()}
-                    className="border-2 border-dashed border-border hover:border-primary/60 rounded-2xl p-6 text-center cursor-pointer transition-colors bg-background/50 flex flex-col items-center justify-center gap-2"
+                    className="border-2 border-dashed border-neutral-200 hover:border-neutral-400 rounded-2xl p-5 text-center cursor-pointer transition-colors bg-neutral-50 flex flex-col items-center justify-center gap-1.5"
                   >
-                    <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">
-                      <Upload size={20} />
+                    <div className="w-8 h-8 rounded-full bg-white border border-neutral-200 text-neutral-600 flex items-center justify-center shadow-sm">
+                      <Upload size={16} />
                     </div>
-                    <p className="text-xs font-bold text-foreground">Click to upload photo</p>
-                    <p className="text-[10px] text-muted-foreground">PNG, JPG up to 5MB</p>
+                    <p className="text-xs font-semibold text-neutral-800">Click to upload photo</p>
+                    <p className="text-[10px] text-neutral-400">PNG, JPG up to 5MB</p>
                   </div>
                 )}
 
@@ -492,22 +494,23 @@ export function ReviewModal({
                   className="hidden"
                 />
 
-                {/* 1-Click Aesthetic Demo Presets */}
-                <div className="pt-1">
-                  <div className="text-[10px] font-mono text-muted-foreground mb-1.5">Quick Demo Presets:</div>
-                  <div className="flex gap-2">
+                {/* Quick Aesthetic Presets */}
+                <div className="pt-0.5">
+                  <div className="text-[10px] font-medium text-neutral-400 mb-1">Quick Presets:</div>
+                  <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
                     {PHOTO_PRESETS.map((preset) => (
                       <button
                         key={preset.name}
                         type="button"
                         onClick={() => setImageUrl(preset.url)}
-                        className={`text-[11px] px-2.5 py-1 rounded-lg border transition-all ${
+                        className={`text-[11px] px-2.5 py-1 rounded-full border transition-all whitespace-nowrap cursor-pointer ${
                           imageUrl === preset.url
-                            ? 'bg-primary/20 border-primary text-primary font-bold'
-                            : 'bg-background border-border text-muted-foreground hover:text-foreground'
+                            ? 'bg-neutral-900 text-white border-neutral-900 font-semibold'
+                            : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
                         }`}
                       >
-                        📸 {preset.name}
+                        <Camera size={11} className="inline mr-1" />
+                        {preset.name}
                       </button>
                     ))}
                   </div>
@@ -515,37 +518,37 @@ export function ReviewModal({
               </div>
 
               {/* Feedback Comment Textarea */}
-              <div className="space-y-2">
-                <label className="text-xs font-mono uppercase tracking-wider text-muted-foreground block">
-                  Your Review & Feedback
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500 block">
+                  Your Review
                 </label>
                 <textarea
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
-                  placeholder="Spill the tea... How's the coffee, crowd, music, Wi-Fi?"
+                  placeholder="How's the coffee, music, vibe, crowd?"
                   rows={3}
-                  className="w-full bg-background border border-border rounded-xl p-3.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors resize-none"
+                  className="w-full bg-neutral-50 border border-neutral-200 rounded-2xl p-3 text-xs text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-neutral-900 transition-colors resize-none"
                   required
                 />
               </div>
 
               {/* Reward Notification Banner */}
               {!isEditing && (
-                <div className="bg-gradient-to-r from-primary/15 via-primary/5 to-transparent border border-primary/40 rounded-xl p-3 flex items-center gap-3">
-                  <div className="p-2 bg-primary/20 text-primary rounded-xl shrink-0">
-                    <Gift size={20} />
+                <div className="bg-primary/5 border border-primary/20 rounded-xl p-3 flex items-center gap-2.5">
+                  <div className="p-1.5 bg-primary/15 text-primary rounded-lg shrink-0">
+                    <Gift size={18} />
                   </div>
                   <div className="text-xs">
-                    <span className="font-bold text-foreground block">Earn 20% OFF Monad NFT Coupon</span>
-                    <span className="text-[10px] text-muted-foreground">
-                      Awarded instantly to wallet <span className="font-mono text-foreground">{walletAddr.slice(0, 6)}...{walletAddr.slice(-4)}</span>
+                    <span className="font-bold text-neutral-900 block">Earn 20% OFF Monad NFT Coupon</span>
+                    <span className="text-[10px] text-neutral-500">
+                      Awarded instantly to wallet <span className="font-mono text-neutral-700">{walletAddr.slice(0, 6)}...{walletAddr.slice(-4)}</span>
                     </span>
                   </div>
                 </div>
               )}
 
               {errorMsg && (
-                <div className="text-xs text-destructive bg-destructive/10 border border-destructive/30 rounded-xl p-3">
+                <div className="text-xs text-rose-600 bg-rose-50 border border-rose-200 rounded-xl p-3">
                   {errorMsg}
                 </div>
               )}
@@ -554,31 +557,31 @@ export function ReviewModal({
               <button
                 type="submit"
                 disabled={isSubmitting || !isWithinRange}
-                className={`w-full font-black py-3.5 rounded-xl flex items-center justify-center gap-2 text-sm transition-all ${
+                className={`w-full font-bold py-3 rounded-full flex items-center justify-center gap-2 text-xs transition-all cursor-pointer ${
                   !isWithinRange
-                    ? 'bg-muted text-muted-foreground border border-border cursor-not-allowed opacity-60'
-                    : 'bg-primary text-primary-foreground hover:brightness-110 shadow-[0_0_24px_rgba(204,255,0,0.3)]'
+                    ? 'bg-neutral-100 text-neutral-400 border border-neutral-200 cursor-not-allowed'
+                    : 'bg-neutral-900 text-white hover:bg-neutral-800 shadow-sm active:scale-98'
                 }`}
               >
                 {!isWithinRange ? (
                   <>
-                    <Lock size={18} />
-                    Locked (Must Be Within 250m of Venue)
+                    <Lock size={15} />
+                    <span>Locked (Must Be Within 250m)</span>
                   </>
                 ) : isSubmitting ? (
                   <>
-                    <Loader2 size={18} className="animate-spin" />
-                    {isEditing ? 'Updating Review...' : 'Minting Monad NFT & Posting...'}
+                    <Loader2 size={15} className="animate-spin" />
+                    <span>{isEditing ? 'Updating Review...' : 'Minting Monad NFT & Posting...'}</span>
                   </>
                 ) : isEditing ? (
                   <>
-                    <CheckCircle2 size={18} />
-                    Update My Review
+                    <CheckCircle2 size={15} />
+                    <span>Update My Review</span>
                   </>
                 ) : (
                   <>
-                    <Sparkles size={18} />
-                    Post Review & Claim 20% NFT
+                    <Sparkles size={15} className="text-primary" />
+                    <span>Post Review & Claim 20% NFT</span>
                   </>
                 )}
               </button>
@@ -589,3 +592,4 @@ export function ReviewModal({
     </div>
   );
 }
+

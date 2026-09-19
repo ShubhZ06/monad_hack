@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { WalletButton } from '@/components/WalletButton';
-import { Users, Calendar, DollarSign, Lock, Clock, ThumbsUp, MessageCircle } from 'lucide-react';
+import { Users, Calendar, DollarSign, Lock, Clock, ThumbsUp, MessageCircle, ArrowLeft, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 interface Community {
@@ -74,7 +74,7 @@ export default function CommunityHub() {
     <div className="min-h-screen bg-background text-foreground pb-24">
       <main className="max-w-3xl mx-auto px-6 pt-6">
         <Link href="/communities" className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary font-bold mb-6 transition-colors">
-          ← Back to Directory
+          <ArrowLeft size={16} /> Back to Directory
         </Link>
         {/* Community Header */}
         <header className="mb-12 border-b border-border pb-8">
@@ -145,7 +145,8 @@ export default function CommunityHub() {
                     <span className="text-sm font-bold">{event.commentsCount} comments</span>
                   </div>
                   <div className="text-sm font-bold text-primary flex items-center gap-1">
-                    View Thread →
+                    <span>View Thread</span>
+                    <ArrowRight size={14} />
                   </div>
                 </div>
               </div>

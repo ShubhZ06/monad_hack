@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, MessageCircle, Send, Shield, Clock, DollarSign, Users, ExternalLink } from 'lucide-react';
+import { ArrowLeft, MessageCircle, Send, Shield, Clock, DollarSign, Users, ExternalLink, Check, Lock } from 'lucide-react';
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { formatUnits, parseUnits } from 'viem';
 import { ESCROW_ADDRESS, MOCK_USDC_ADDRESS, ESCROW_ABI, USDC_ABI } from '@/config/contracts';
@@ -18,14 +18,14 @@ const EVENT_META = {
 };
 
 const INITIAL_COMMENTS = [
-  { id: 'c1', username: 'NeonChad_4F9A', text: 'This is going to be insane 🔥', time: '2h ago' },
+  { id: 'c1', username: 'NeonChad_4F9A', text: 'This is going to be insane', time: '2h ago' },
   { id: 'c2', username: 'VibeWhale_88B2', text: 'Just pledged! Let\'s hit the 100 mark.', time: '5h ago' },
 ];
 
 const STATE_LABELS: Record<number, string> = {
   0: 'BIDDING',
   1: 'PLEDGING LIVE',
-  2: 'LOCKED 🔒',
+  2: 'LOCKED',
   3: 'COMPLETED',
   4: 'DISPUTED',
   5: 'REFUNDED',
@@ -113,8 +113,8 @@ export default function EventThread() {
 
   const pledgeButtonLabel = () => {
     if (!isConnected) return 'Connect Wallet to Pledge';
-    if (alreadyPledged) return '✓ Already Pledged';
-    if (pledgeStep === 'done' || pledgeSuccess) return '✓ Pledged!';
+    if (alreadyPledged) return 'Already Pledged';
+    if (pledgeStep === 'done' || pledgeSuccess) return 'Pledged!';
     if (pledgeStep === 'approving' || isApproving) return 'Sending MON...';
     if (pledgeStep === 'pledging' || isPledging) return 'Confirming on Monad...';
     return `Pledge 0.1 MON`;
@@ -192,6 +192,7 @@ export default function EventThread() {
             disabled={isPledgeDisabled}
             className="w-full bg-primary text-primary-foreground font-bold py-4 rounded-2xl hover:scale-105 transition-transform flex justify-center items-center gap-2 text-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
+            {(alreadyPledged || pledgeStep === 'done' || pledgeSuccess) && <Check size={18} />}
             {pledgeButtonLabel()}
           </button>
 

@@ -3,7 +3,7 @@
 import { useAccount, useConnect, useDisconnect, useEnsName } from 'wagmi';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { ArrowRight, LogOut } from 'lucide-react';
+import { ArrowRight, LogOut, Flame } from 'lucide-react';
 
 interface WalletButtonProps {
   className?: string;
@@ -44,18 +44,24 @@ export function WalletButton({ className = "", showIcon = true }: WalletButtonPr
     const displayName = ensName ? ensName : generateUsername(address);
     
     return (
-      <div className="flex items-center gap-4">
-        <div className="bg-card border border-border px-4 py-2 rounded-lg font-mono text-sm">
-          {displayName}
+      <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 bg-white border border-[#eee7dc] shadow-sm px-3 py-1.5 rounded-full text-xs font-semibold text-neutral-800">
+          <div className="w-5 h-5 rounded-full p-[1px] season-story-ring flex items-center justify-center shrink-0">
+            <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
+              <Flame size={10} className="text-primary fill-primary" />
+            </div>
+          </div>
+          <span className="truncate max-w-[100px] sm:max-w-none">{displayName}</span>
         </div>
         <button
           onClick={() => disconnect()}
-          className="text-muted-foreground hover:text-foreground transition-colors p-2"
+          className="text-neutral-400 hover:text-neutral-700 bg-white border border-[#eee7dc] rounded-full p-1.5 shadow-sm transition-colors cursor-pointer"
           title="Disconnect Wallet"
         >
-          <LogOut size={20} />
+          <LogOut size={14} />
         </button>
       </div>
+
     );
   }
 
@@ -63,10 +69,11 @@ export function WalletButton({ className = "", showIcon = true }: WalletButtonPr
     <button
       disabled={isPending}
       onClick={() => connect({ connector: metaMaskConnector })}
-      className={`bg-primary text-primary-foreground px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:scale-105 transition-transform shadow-[0_0_30px_rgba(204,255,0,0.3)] disabled:opacity-50 disabled:hover:scale-100 ${className}`}
+      className={`bg-neutral-900 text-white hover:bg-neutral-800 px-5 py-2.5 rounded-full font-semibold text-sm flex items-center justify-center gap-2 active:scale-95 transition-all shadow-sm disabled:opacity-50 ${className}`}
     >
-      {isPending ? 'Connecting...' : 'Connect MetaMask to Enter'}
-      {showIcon && !isPending && <ArrowRight size={20} />}
+      {isPending ? 'Connecting...' : 'Connect Wallet'}
+      {showIcon && !isPending && <ArrowRight size={16} />}
     </button>
   );
 }
+
