@@ -41,17 +41,7 @@ const VENUES = [
 export default function DiscoveryFeed() {
   return (
     <div className="min-h-screen bg-background text-foreground pb-24">
-      {/* Navigation */}
-      <nav className="border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="font-mono font-bold text-xl tracking-tighter">
-            MONAD<span className="text-primary">.PWA</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <WalletButton className="!px-4 !py-2 !text-sm !rounded-lg !shadow-none" showIcon={false} />
-          </div>
-        </div>
-      </nav>
+
 
       <main className="max-w-7xl mx-auto px-6 pt-12">
         <header className="mb-12">

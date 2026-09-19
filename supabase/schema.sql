@@ -47,3 +47,41 @@ CREATE TABLE public.soft_interest (
 );
 
 -- Note: Row Level Security (RLS) can be enabled later for production.
+
+-- 5. Communities Table
+CREATE TABLE public.communities (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name TEXT NOT NULL UNIQUE,
+    description TEXT,
+    image_url TEXT,
+    member_count INTEGER DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 6. Community Members (Who joined what)
+CREATE TABLE public.community_members (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    community_id UUID REFERENCES public.communities(id) ON DELETE CASCADE,
+    wallet_address TEXT REFERENCES public.users(wallet_address) ON DELETE CASCADE,
+    joined_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    UNIQUE(community_id, wallet_address)
+);
+
+-- 7. Modify Event Requests to link to a Community
+ALTER TABLE public.event_requests 
+ADD COLUMN community_id UUID REFERENCES public.communities(id) ON DELETE CASCADE;
+
+-- 8. Comments Table (The conversations on Event Requests)
+CREATE TABLE public.comments (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    event_id UUID REFERENCES public.event_requests(id) ON DELETE CASCADE,
+    wallet_address TEXT REFERENCES public.users(wallet_address) ON DELETE CASCADE,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Insert some dummy communities to start with
+INSERT INTO public.communities (name, description, member_count) VALUES 
+('NYU Builders', 'Official community for NYU students building on Monad', 142),
+('Columbia Crypto', 'Columbia University Blockchain and Crypto Club', 89),
+('Monad NYC', 'General Monad enthusiasts in the New York area', 450);

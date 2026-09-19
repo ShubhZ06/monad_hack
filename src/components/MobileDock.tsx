@@ -14,7 +14,7 @@ export function MobileDock() {
 
   const tabs = [
     { name: 'Discovery', href: '/home', icon: Compass },
-    { name: 'Community', href: '/events', icon: Users },
+    { name: 'Community', href: '/communities', icon: Users },
     { name: 'Profile', href: '/profile', icon: User },
   ];
 

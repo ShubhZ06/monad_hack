@@ -9,8 +9,8 @@ const EVENTS = [
     title: 'Rooftop Movie Night',
     organizer: 'NYU Film Club',
     state: 'PLEDGING', // Draft -> Interest -> Bidding -> Voting -> Pledging -> Locked
-    price: '500',
-    currency: 'USDC',
+    price: '0.1',
+    currency: 'MON',
     targetHeadcount: 100,
     currentPledges: 82,
     date: 'Oct 15, 2026',
@@ -22,7 +22,7 @@ const EVENTS = [
     title: 'Hackathon Afterparty',
     organizer: 'Monad Builders',
     state: 'LOCKED',
-    price: '15',
+    price: '0.1',
     currency: 'MON',
     targetHeadcount: 50,
     currentPledges: 55,
@@ -35,8 +35,8 @@ const EVENTS = [
     title: 'Weekend Paintball Trip',
     organizer: 'Pending Organizer',
     state: 'INTEREST',
-    price: '~800', // Indicative
-    currency: 'USDC',
+    price: '~0.5', // Indicative
+    currency: 'MON',
     targetHeadcount: 40,
     currentInterest: 28,
     date: 'Nov 5, 2026',
