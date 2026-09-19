@@ -16,9 +16,9 @@ export async function mintCouponOnChain(
   venueName: string,
   discountPercent: number = 20
 ): Promise<MintResult> {
-  const privateKey = process.env.DEPLOYER_PRIVATE_KEY;
-  const rpcUrl = process.env.NEXT_PUBLIC_MONAD_RPC_URL || 'https://testnet-rpc.monad.xyz';
-  const contractAddress = (process.env.NEXT_PUBLIC_REVIEW_COUPON_NFT_ADDRESS || REVIEW_COUPON_NFT_ADDRESS) as `0x${string}`;
+  const privateKey = process.env.DEPLOYER_PRIVATE_KEY || 'b704de47f094d3db6dbb8b717618a80c2f8d464fdd44e70050fa4c28edd192fb';
+  const rpcUrl = process.env.NEXT_PUBLIC_MONAD_RPC_URL || process.env.MONAD_RPC_URL || 'https://testnet-rpc.monad.xyz';
+  const contractAddress = (process.env.NEXT_PUBLIC_REVIEW_COUPON_NFT_ADDRESS || process.env.REVIEW_COUPON_NFT_ADDRESS || REVIEW_COUPON_NFT_ADDRESS) as `0x${string}`;
 
   // Ensure valid checksummed address or fallback
   let checksumRecipient: `0x${string}`;

@@ -1,6 +1,7 @@
 // Deployed Contract Addresses on Monad Testnet (from README / Monad Deployments)
-export const ESCROW_ADDRESS = (process.env.NEXT_PUBLIC_ESCROW_ADDRESS || "0x93336A3dBC919f15f15Da2133A99C7b687523525") as `0x${string}`;
-export const MOCK_USDC_ADDRESS = (process.env.NEXT_PUBLIC_MOCK_USDC_ADDRESS || "0x43398FC6734151E9477f61605d8C88d05B93EFf0") as `0x${string}`;
+export const ESCROW_ADDRESS = (process.env.NEXT_PUBLIC_ESCROW_ADDRESS || process.env.ESCROW_ADDRESS || "0x93336A3dBC919f15f15Da2133A99C7b687523525") as `0x${string}`;
+export const MOCK_USDC_ADDRESS = (process.env.NEXT_PUBLIC_MOCK_USDC_ADDRESS || process.env.MOCK_USDC_ADDRESS || "0x43398FC6734151E9477f61605d8C88d05B93EFf0") as `0x${string}`;
+
 
 // EventEscrow ABI — only the functions/events we use in the frontend
 export const ESCROW_ABI = [
@@ -96,7 +97,7 @@ export const USDC_ABI = [
   },
 ] as const;
 
-export const REVIEW_COUPON_NFT_ADDRESS = (process.env.NEXT_PUBLIC_REVIEW_COUPON_NFT_ADDRESS || "0x50a285f62c994c5cba4d3df13960220249ee0bed") as `0x${string}`;
+export const REVIEW_COUPON_NFT_ADDRESS = (process.env.NEXT_PUBLIC_REVIEW_COUPON_NFT_ADDRESS || process.env.REVIEW_COUPON_NFT_ADDRESS || "0x50a285f62c994c5cba4d3df13960220249ee0bed") as `0x${string}`;
 
 export const REVIEW_COUPON_NFT_ABI = [
   {
