@@ -81,12 +81,41 @@ export default function EventThread() {
   }
 
   // ─── Derived data ──────────────────────────────────────────────────
-  const currentPledges = eventData ? Number(eventData[2]) : 0;
+  const currentPledges = eventData ? Number(eventData[2]) : 1;
   const targetHeadcount = eventData ? Number(eventData[1]) : 40;
-  const pricePerHead = eventData ? eventData[3] : BigInt(1e17); // fallback: 0.1 MON in wei
+  const pricePerHead = eventData ? eventData[3] : BigInt(50000000); // 50 USDC (6 decimals)
+  const priceFormatted = formatUnits(pricePerHead, 6);
   const eventState = eventData ? Number(eventData[5]) : 1;
-  const totalLocked = currentPledges * Number(formatUnits(pricePerHead, 18));
+  const totalLocked = currentPledges * Number(priceFormatted);
   const progress = targetHeadcount > 0 ? (currentPledges / targetHeadcount) * 100 : 0;
+
+  // ─── Testnet MockUSDC Balance & Faucet ──────────────────────────────
+  const { data: usdcBalance, refetch: refetchUsdc } = useReadContract({
+    address: MOCK_USDC_ADDRESS,
+    abi: USDC_ABI,
+    functionName: 'balanceOf',
+    args: [address ?? '0x0000000000000000000000000000000000000000'],
+    query: { enabled: isConnected && !!address },
+  });
+
+  const { writeContract: mintUsdc, data: mintTxHash, isPending: isMintPending } = useWriteContract();
+  const { isLoading: isMinting, isSuccess: mintSuccess } = useWaitForTransactionReceipt({ hash: mintTxHash });
+
+  if (mintSuccess) {
+    refetchUsdc();
+  }
+
+  const handleMintUsdc = () => {
+    if (!address) return;
+    mintUsdc({
+      address: MOCK_USDC_ADDRESS,
+      abi: USDC_ABI,
+      functionName: 'mint',
+      args: [address, parseUnits('500', 6)],
+    });
+  };
+
+  const formattedBalance = usdcBalance !== undefined ? formatUnits(usdcBalance, 6) : '0';
 
   const handlePledge = () => {
     if (!isConnected || !address) return;
@@ -113,11 +142,11 @@ export default function EventThread() {
 
   const pledgeButtonLabel = () => {
     if (!isConnected) return 'Connect Wallet to Pledge';
-    if (alreadyPledged) return 'Already Pledged';
-    if (pledgeStep === 'done' || pledgeSuccess) return 'Pledged!';
-    if (pledgeStep === 'approving' || isApproving) return 'Sending MON...';
-    if (pledgeStep === 'pledging' || isPledging) return 'Confirming on Monad...';
-    return `Pledge 0.1 MON`;
+    if (alreadyPledged) return '✓ Already Pledged (Recorded On-Chain)';
+    if (pledgeStep === 'done' || pledgeSuccess) return '✓ Successfully Pledged!';
+    if (pledgeStep === 'approving' || isApproving) return 'Approving MockUSDC...';
+    if (pledgeStep === 'pledging' || isPledging) return 'Confirming Pledge on Monad...';
+    return `Pledge ${priceFormatted} USDC`;
   };
 
   const isPledgeDisabled = !isConnected || !!alreadyPledged || pledgeStep !== 'idle' || pledgeSuccess;
@@ -132,7 +161,7 @@ export default function EventThread() {
         {/* Main Event Card */}
         <div className="bg-card border border-border rounded-3xl p-6 relative overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.3)]">
           <div className="absolute top-6 right-6">
-            <span className="bg-primary/20 text-primary border border-primary/30 px-3 py-1 rounded-full text-xs font-bold animate-pulse">
+            <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full text-xs font-bold animate-pulse">
               {STATE_LABELS[eventState] ?? 'LOADING...'}
             </span>
           </div>
@@ -144,7 +173,7 @@ export default function EventThread() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             <div className="bg-background border border-border rounded-xl p-4">
               <div className="text-xs text-muted-foreground uppercase font-bold tracking-wider flex items-center gap-1 mb-1">
-                <Users size={12} className="text-primary"/> Pledged
+                <Users size={12} className="text-primary"/> Pledged On-Chain
               </div>
               <div className="text-2xl font-bold">{currentPledges} <span className="text-sm text-muted-foreground">/ {targetHeadcount}</span></div>
             </div>
@@ -153,7 +182,7 @@ export default function EventThread() {
               <div className="text-xs text-muted-foreground uppercase font-bold tracking-wider flex items-center gap-1 mb-1">
                 <DollarSign size={12} className="text-primary"/> Vault Total
               </div>
-              <div className="text-2xl font-bold">{totalLocked.toFixed(2)} <span className="text-sm text-muted-foreground">MON</span></div>
+              <div className="text-2xl font-bold">{totalLocked.toFixed(0)} <span className="text-sm text-muted-foreground">USDC</span></div>
             </div>
 
             <div className="bg-background border border-border rounded-xl p-4 col-span-2 md:col-span-1">
@@ -175,16 +204,34 @@ export default function EventThread() {
           {/* Progress Bar */}
           <div className="mb-6">
             <div className="flex justify-between text-sm mb-2 font-medium">
-              <span className="text-primary font-bold">{progress.toFixed(0)}% funded</span>
-              <span className="text-muted-foreground">{targetHeadcount - currentPledges} spots left</span>
+              <span className="text-emerald-400 font-bold">{progress.toFixed(0)}% funded</span>
+              <span className="text-muted-foreground">{Math.max(targetHeadcount - currentPledges, 0)} spots left</span>
             </div>
             <div className="w-full bg-background rounded-full h-3 overflow-hidden border border-border">
               <div
-                className="bg-primary h-3 rounded-full transition-all duration-1000"
+                className="bg-emerald-500 h-3 rounded-full transition-all duration-1000"
                 style={{ width: `${Math.min(progress, 100)}%` }}
               />
             </div>
           </div>
+
+          {/* User Balance & Testnet Faucet */}
+          {isConnected && (
+            <div className="flex items-center justify-between p-3.5 mb-4 rounded-2xl bg-background border border-border text-xs">
+              <div>
+                <span className="text-muted-foreground">Your Balance: </span>
+                <span className="font-bold text-foreground">{Number(formattedBalance).toLocaleString()} USDC</span>
+              </div>
+              <button
+                type="button"
+                onClick={handleMintUsdc}
+                disabled={isMintPending || isMinting}
+                className="bg-secondary hover:bg-border text-foreground font-semibold px-3 py-1.5 rounded-lg border border-border transition-colors disabled:opacity-50"
+              >
+                {isMintPending || isMinting ? 'Minting 500 USDC...' : '+ Faucet: Get 500 Testnet USDC'}
+              </button>
+            </div>
+          )}
 
           {/* Pledge Button */}
           <button
@@ -192,13 +239,12 @@ export default function EventThread() {
             disabled={isPledgeDisabled}
             className="w-full bg-primary text-primary-foreground font-bold py-4 rounded-2xl hover:scale-105 transition-transform flex justify-center items-center gap-2 text-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
-            {(alreadyPledged || pledgeStep === 'done' || pledgeSuccess) && <Check size={18} />}
             {pledgeButtonLabel()}
           </button>
 
           {(isApproving || isPledging) && (
             <p className="text-center text-xs text-muted-foreground mt-3 animate-pulse">
-              Transaction pending on Monad... Do not close this page.
+              Transaction pending on Monad Testnet... Please confirm in your wallet.
             </p>
           )}
         </div>

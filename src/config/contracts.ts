@@ -1,6 +1,6 @@
-// Deployed Contract Addresses on Monad Testnet
-export const ESCROW_ADDRESS = process.env.NEXT_PUBLIC_ESCROW_ADDRESS as `0x${string}`;
-export const MOCK_USDC_ADDRESS = process.env.NEXT_PUBLIC_MOCK_USDC_ADDRESS as `0x${string}`;
+// Deployed Contract Addresses on Monad Testnet (from README / Monad Deployments)
+export const ESCROW_ADDRESS = (process.env.NEXT_PUBLIC_ESCROW_ADDRESS || "0x93336A3dBC919f15f15Da2133A99C7b687523525") as `0x${string}`;
+export const MOCK_USDC_ADDRESS = (process.env.NEXT_PUBLIC_MOCK_USDC_ADDRESS || "0x43398FC6734151E9477f61605d8C88d05B93EFf0") as `0x${string}`;
 
 // EventEscrow ABI — only the functions/events we use in the frontend
 export const ESCROW_ABI = [
@@ -83,6 +83,16 @@ export const USDC_ABI = [
       { name: "spender", type: "address" },
     ],
     outputs: [{ name: "", type: "uint256" }],
+  },
+  {
+    name: "mint",
+    type: "function",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "to", type: "address" },
+      { name: "amount", type: "uint256" },
+    ],
+    outputs: [],
   },
 ] as const;
 
