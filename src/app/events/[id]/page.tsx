@@ -6,16 +6,23 @@ import { ArrowLeft, MessageCircle, Send, Shield, Clock, DollarSign, Users, Exter
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { formatUnits, parseUnits } from 'viem';
 import { ESCROW_ADDRESS, MOCK_USDC_ADDRESS, ESCROW_ABI, USDC_ABI } from '@/config/contracts';
+import { VendorBiddingLeaderboard } from '@/components/VendorBiddingLeaderboard';
+import { DEMO_BIDDING_EVENT } from '@/lib/bidsData';
 
 // Onchain event ID — in production this maps from Supabase event to chain event ID
 const ONCHAIN_EVENT_ID = BigInt(0);
 
-// Mock metadata (title, description, date come from Supabase — only financials from chain)
 const EVENT_META = {
   title: 'Rooftop Movie Night',
   description: 'We secured the Sunset Lounge rooftop. Price includes projector rental, seating, and 1 drink ticket.',
   date: 'Oct 15, 2026',
 };
+
+const BIDDING_COMMENTS = [
+  { id: 'c1', username: 'CryptoRave_Organizer', text: '50/50 quorum hit in less than 4 hours! Let the vendor fight begin 🍿', time: '1h ago' },
+  { id: 'c2', username: 'MonadBuilder_99', text: 'Hope we get the rooftop lasers and DJ sound system included in the winning bid!', time: '30m ago' },
+  { id: 'c3', username: 'VendorWatcher', text: 'Monad Rooftop Collective just undercut CyberBass by ₹150! Rank #1 is heated 🔥', time: '12m ago' },
+];
 
 const INITIAL_COMMENTS = [
   { id: 'c1', username: 'NeonChad_4F9A', text: 'This is going to be insane', time: '2h ago' },
@@ -23,7 +30,7 @@ const INITIAL_COMMENTS = [
 ];
 
 const STATE_LABELS: Record<number, string> = {
-  0: 'BIDDING',
+  0: 'BIDDING LIVE',
   1: 'PLEDGING LIVE',
   2: 'LOCKED',
   3: 'COMPLETED',
@@ -35,7 +42,11 @@ export default function EventThread() {
   const params = useParams();
   const router = useRouter();
   const { address, isConnected } = useAccount();
-  const [comments, setComments] = useState(INITIAL_COMMENTS);
+
+  const eventId = (params?.id as string) || '';
+  const isBiddingEvent = eventId === 'event-neon-nights-bidding' || eventId === DEMO_BIDDING_EVENT.id;
+
+  const [comments, setComments] = useState(isBiddingEvent ? BIDDING_COMMENTS : INITIAL_COMMENTS);
   const [newComment, setNewComment] = useState('');
   const [pledgeStep, setPledgeStep] = useState<'idle' | 'approving' | 'pledging' | 'done'>('idle');
 
@@ -45,6 +56,7 @@ export default function EventThread() {
     abi: ESCROW_ABI,
     functionName: 'events',
     args: [ONCHAIN_EVENT_ID],
+    query: { enabled: !isBiddingEvent },
   });
 
   const { data: alreadyPledged } = useReadContract({
@@ -52,7 +64,7 @@ export default function EventThread() {
     abi: ESCROW_ABI,
     functionName: 'hasPledged',
     args: [ONCHAIN_EVENT_ID, address ?? '0x0000000000000000000000000000000000000000'],
-    query: { enabled: isConnected && !!address },
+    query: { enabled: !isBiddingEvent && isConnected && !!address },
   });
 
   // ─── On-chain writes ───────────────────────────────────────────────
@@ -81,13 +93,25 @@ export default function EventThread() {
   }
 
   // ─── Derived data ──────────────────────────────────────────────────
-  const currentPledges = eventData ? Number(eventData[2]) : 1;
-  const targetHeadcount = eventData ? Number(eventData[1]) : 40;
+  const currentPledges = isBiddingEvent
+    ? DEMO_BIDDING_EVENT.current_headcount
+    : (eventData ? Number(eventData[2]) : 1);
+  const targetHeadcount = isBiddingEvent
+    ? DEMO_BIDDING_EVENT.target_headcount
+    : (eventData ? Number(eventData[1]) : 40);
   const pricePerHead = eventData ? eventData[3] : BigInt(50000000); // 50 USDC (6 decimals)
   const priceFormatted = formatUnits(pricePerHead, 6);
-  const eventState = eventData ? Number(eventData[5]) : 1;
+  const eventState = isBiddingEvent ? 0 : (eventData ? Number(eventData[5]) : 1);
   const totalLocked = currentPledges * Number(priceFormatted);
   const progress = targetHeadcount > 0 ? (currentPledges / targetHeadcount) * 100 : 0;
+
+  const meta = isBiddingEvent
+    ? {
+        title: DEMO_BIDDING_EVENT.title,
+        description: DEMO_BIDDING_EVENT.description,
+        date: DEMO_BIDDING_EVENT.event_date,
+      }
+    : EVENT_META;
 
   // ─── Testnet MockUSDC Balance & Faucet ──────────────────────────────
   const { data: usdcBalance, refetch: refetchUsdc } = useReadContract({
@@ -95,7 +119,7 @@ export default function EventThread() {
     abi: USDC_ABI,
     functionName: 'balanceOf',
     args: [address ?? '0x0000000000000000000000000000000000000000'],
-    query: { enabled: isConnected && !!address },
+    query: { enabled: !isBiddingEvent && isConnected && !!address },
   });
 
   const { writeContract: mintUsdc, data: mintTxHash, isPending: isMintPending } = useWriteContract();
@@ -166,23 +190,26 @@ export default function EventThread() {
             </span>
           </div>
 
-          <h1 className="text-3xl font-bold mb-3 pr-32">{EVENT_META.title}</h1>
-          <p className="text-muted-foreground text-base mb-8">{EVENT_META.description}</p>
+          <h1 className="text-3xl font-bold mb-3 pr-32">{meta.title}</h1>
+          <p className="text-muted-foreground text-base mb-8">{meta.description}</p>
 
           {/* Stats Grid */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             <div className="bg-background border border-border rounded-xl p-4">
               <div className="text-xs text-muted-foreground uppercase font-bold tracking-wider flex items-center gap-1 mb-1">
-                <Users size={12} className="text-primary"/> Pledged On-Chain
+                <Users size={12} className="text-primary"/> {isBiddingEvent ? 'Quorum Voted' : 'Pledged On-Chain'}
               </div>
               <div className="text-2xl font-bold">{currentPledges} <span className="text-sm text-muted-foreground">/ {targetHeadcount}</span></div>
             </div>
 
             <div className="bg-background border border-border rounded-xl p-4">
               <div className="text-xs text-muted-foreground uppercase font-bold tracking-wider flex items-center gap-1 mb-1">
-                <DollarSign size={12} className="text-primary"/> Vault Total
+                <DollarSign size={12} className="text-primary"/> {isBiddingEvent ? 'Target Budget' : 'Vault Total'}
               </div>
-              <div className="text-2xl font-bold">{totalLocked.toFixed(0)} <span className="text-sm text-muted-foreground">USDC</span></div>
+              <div className="text-2xl font-bold">
+                {isBiddingEvent ? '₹1,500' : `${totalLocked.toFixed(0)} USDC`}
+                {isBiddingEvent && <span className="text-xs font-normal text-muted-foreground"> / head</span>}
+              </div>
             </div>
 
             <div className="bg-background border border-border rounded-xl p-4 col-span-2 md:col-span-1">
@@ -204,8 +231,10 @@ export default function EventThread() {
           {/* Progress Bar */}
           <div className="mb-6">
             <div className="flex justify-between text-sm mb-2 font-medium">
-              <span className="text-emerald-400 font-bold">{progress.toFixed(0)}% funded</span>
-              <span className="text-muted-foreground">{Math.max(targetHeadcount - currentPledges, 0)} spots left</span>
+              <span className="text-emerald-400 font-bold">{progress.toFixed(0)}% {isBiddingEvent ? 'Quorum Reached' : 'funded'}</span>
+              <span className="text-muted-foreground">
+                {isBiddingEvent ? 'Full quorum met! Bidding open.' : `${Math.max(targetHeadcount - currentPledges, 0)} spots left`}
+              </span>
             </div>
             <div className="w-full bg-background rounded-full h-3 overflow-hidden border border-border">
               <div
@@ -215,8 +244,8 @@ export default function EventThread() {
             </div>
           </div>
 
-          {/* User Balance & Testnet Faucet */}
-          {isConnected && (
+          {/* User Balance & Testnet Faucet (Only for Pledging) */}
+          {!isBiddingEvent && isConnected && (
             <div className="flex items-center justify-between p-3.5 mb-4 rounded-2xl bg-background border border-border text-xs">
               <div>
                 <span className="text-muted-foreground">Your Balance: </span>
@@ -233,21 +262,50 @@ export default function EventThread() {
             </div>
           )}
 
-          {/* Pledge Button */}
-          <button
-            onClick={handlePledge}
-            disabled={isPledgeDisabled}
-            className="w-full bg-primary text-primary-foreground font-bold py-4 rounded-2xl hover:scale-105 transition-transform flex justify-center items-center gap-2 text-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-          >
-            {pledgeButtonLabel()}
-          </button>
+          {/* Pledge Button (Only for Pledging) */}
+          {!isBiddingEvent ? (
+            <>
+              <button
+                onClick={handlePledge}
+                disabled={isPledgeDisabled}
+                className="w-full bg-primary text-primary-foreground font-bold py-4 rounded-2xl hover:scale-105 transition-transform flex justify-center items-center gap-2 text-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              >
+                {pledgeButtonLabel()}
+              </button>
 
-          {(isApproving || isPledging) && (
-            <p className="text-center text-xs text-muted-foreground mt-3 animate-pulse">
-              Transaction pending on Monad Testnet... Please confirm in your wallet.
-            </p>
+              {(isApproving || isPledging) && (
+                <p className="text-center text-xs text-muted-foreground mt-3 animate-pulse">
+                  Transaction pending on Monad Testnet... Please confirm in your wallet.
+                </p>
+              )}
+            </>
+          ) : (
+            <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">
+                  ✓
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-foreground">Quorum Met: 50 / 50 Votes</div>
+                  <div className="text-[11px] text-muted-foreground">Voting closed. Vendors are actively bidding below.</div>
+                </div>
+              </div>
+              <span className="text-[10px] font-black uppercase text-emerald-400 px-2.5 py-1 bg-emerald-500/20 rounded-full">
+                Auction Active
+              </span>
+            </div>
           )}
         </div>
+
+        {/* Vendor Bidding Leaderboard & Arena (Embedded for Bidding Events) */}
+        {isBiddingEvent && (
+          <VendorBiddingLeaderboard
+            eventId={eventId || DEMO_BIDDING_EVENT.id}
+            eventTitle={meta.title}
+            targetHeadcount={targetHeadcount}
+            indicativePriceInr={DEMO_BIDDING_EVENT.indicative_price}
+          />
+        )}
 
         {/* Conversations */}
         <div className="flex flex-col gap-4">

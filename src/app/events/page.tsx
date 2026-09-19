@@ -1,6 +1,6 @@
 'use client';
 
-import { Calendar, Users, DollarSign, Lock, Clock, ThumbsUp, Shield, ExternalLink, Sparkles } from 'lucide-react';
+import { Calendar, Users, DollarSign, Lock, Clock, ThumbsUp, Shield, ExternalLink, Sparkles, Trophy } from 'lucide-react';
 import Link from 'next/link';
 import { useReadContract } from 'wagmi';
 import { formatUnits } from 'viem';
@@ -123,20 +123,21 @@ export default function EventsDashboard() {
           </div>
 
           {/* Event 2: Hackathon Afterparty & Vendor Bidding Arena */}
-          <div className="bg-white border border-[#eee7dc] rounded-2xl sm:rounded-3xl p-5 sm:p-6 hover:border-primary/40 transition-all flex flex-col relative shadow-sm">
-            <div className="absolute top-5 right-5">
-              <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1">
-                <Lock size={11} /> 100% VOTED • BIDDING LIVE
+          <div className="bg-white border-2 border-emerald-500/30 rounded-2xl sm:rounded-3xl p-5 sm:p-6 hover:border-emerald-500/50 transition-all flex flex-col relative shadow-sm">
+            <div className="absolute top-5 right-5 flex items-center gap-2">
+              <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1 animate-pulse">
+                <Shield size={11} className="text-emerald-600" />
+                BIDDING LIVE
               </span>
             </div>
 
-            <div className="mb-4 pr-24">
-              <div className="text-[10px] font-mono text-primary font-bold uppercase tracking-wider mb-1">
-                Reverse Auction Arena
+            <div className="mb-4 pr-32">
+              <div className="text-[10px] font-mono text-emerald-600 font-bold uppercase tracking-wider mb-1 flex items-center gap-1">
+                <Sparkles size={11} /> 100% Voted • Reverse Auction
               </div>
               <h3 className="font-display font-bold text-lg sm:text-xl text-neutral-900 mb-1">Neon Nights Hackathon Rave</h3>
               <p className="text-xs text-neutral-500 line-clamp-2 leading-relaxed">
-                Full quorum reached! 50 builders locked in. Verified vendors are currently competing to organize this event for the minimum charge.
+                Full quorum reached! 50 builders locked in. Verified vendors are currently competing to organize this event for the lowest charge.
               </p>
             </div>
 
@@ -150,27 +151,43 @@ export default function EventsDashboard() {
               </div>
               
               <div className="bg-[#fbf9f5] border border-[#eee7dc] rounded-xl p-2.5 flex items-center gap-2.5">
-                <div className="text-primary"><DollarSign size={16} /></div>
+                <div className="text-emerald-600"><DollarSign size={16} /></div>
                 <div>
-                  <div className="text-[10px] text-neutral-400 uppercase font-bold tracking-wider">Target Budget</div>
-                  <div className="font-semibold text-xs text-neutral-800">₹1,500 / head</div>
+                  <div className="text-[10px] text-neutral-400 uppercase font-bold tracking-wider">Lowest Bid</div>
+                  <div className="font-semibold text-xs text-neutral-800">₹1,100 / head</div>
                 </div>
               </div>
             </div>
 
+            {/* Progress Bar & Actions */}
             <div className="mt-auto pt-4 border-t border-[#f4f0e8]">
               <div className="flex justify-between text-xs mb-1.5 font-medium">
-                <span className="font-bold text-emerald-700">50 / 50 Quorum Reached</span>
-                <span className="text-neutral-400">3 Competing Bids</span>
+                <span className="font-bold text-emerald-700 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  3 Competing Bids (Rank #1: ₹1,100)
+                </span>
+                <span className="text-neutral-500 font-semibold">Quorum: 50 / 50</span>
               </div>
-              <div className="w-full bg-neutral-100 rounded-full h-2.5 mb-4 overflow-hidden">
-                <div className="bg-primary h-2.5 rounded-full w-full"></div>
+              <div className="w-full bg-neutral-100 rounded-full h-2.5 mb-4 overflow-hidden border border-neutral-200/50">
+                <div 
+                  className="bg-emerald-500 h-2.5 rounded-full w-full transition-all duration-1000" 
+                ></div>
               </div>
-              <Link href="/events/event-neon-nights-bidding">
-                <button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 rounded-full text-xs transition-colors cursor-pointer shadow-sm flex items-center justify-center gap-1.5">
-                  <span>Enter Vendor Bidding Arena</span>
-                </button>
-              </Link>
+
+              <div className="flex gap-2.5 items-center">
+                <Link href="/events/event-neon-nights-bidding" className="flex-1">
+                  <button className="w-full bg-neutral-900 hover:bg-neutral-800 text-white font-semibold py-2.5 rounded-full text-xs transition-colors cursor-pointer shadow-sm flex items-center justify-center gap-1.5">
+                    <span>Enter Bidding Arena (Lowest Charge Wins)</span>
+                  </button>
+                </Link>
+                <Link
+                  href="/events/event-neon-nights-bidding"
+                  className="p-2.5 border border-[#eee7dc] hover:bg-neutral-50 rounded-full text-neutral-600 transition-colors cursor-pointer"
+                  title="View Bidding Arena Leaderboard"
+                >
+                  <Trophy size={14} className="text-emerald-600" />
+                </Link>
+              </div>
             </div>
           </div>
 
