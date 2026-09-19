@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Providers } from "@/components/Providers";
+import { MobileDock } from "@/components/MobileDock";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,8 +26,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <Providers>{children}</Providers>
+      <body className="min-h-full flex flex-col pb-20 md:pb-0">
+        <Providers>
+          {children}
+          <MobileDock />
+        </Providers>
       </body>
     </html>
   );

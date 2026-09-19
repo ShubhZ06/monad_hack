@@ -28,8 +28,20 @@ export function WalletButton({ className = "", showIcon = true }: WalletButtonPr
   // We use the first injected connector (MetaMask)
   const metaMaskConnector = connectors.find((c) => c.id === 'injected' || c.name.toLowerCase().includes('metamask')) || connectors[0];
 
+  // Generate a fun placeholder name if they don't have an ENS name
+  const generateUsername = (addr: string) => {
+    const adjectives = ['Vibe', 'Neon', 'Based', 'Cyber', 'Based', 'Chill', 'Hype'];
+    const nouns = ['Rider', 'Whale', 'Degen', 'Punk', 'Chad', 'Guru'];
+    
+    // Use part of address to deterministically pick words
+    const num1 = parseInt(addr.slice(2, 4), 16) % adjectives.length;
+    const num2 = parseInt(addr.slice(4, 6), 16) % nouns.length;
+    
+    return `${adjectives[num1]}${nouns[num2]}_${addr.slice(-4)}`;
+  };
+
   if (isConnected && address) {
-    const displayName = ensName ? ensName : `${address.slice(0, 6)}...${address.slice(-4)}`;
+    const displayName = ensName ? ensName : generateUsername(address);
     
     return (
       <div className="flex items-center gap-4">

@@ -48,9 +48,6 @@ export default function DiscoveryFeed() {
             MONAD<span className="text-primary">.PWA</span>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/events" className="text-sm font-bold bg-secondary text-secondary-foreground px-4 py-2 rounded-lg hover:bg-border transition-colors">
-              My Events
-            </Link>
             <WalletButton className="!px-4 !py-2 !text-sm !rounded-lg !shadow-none" showIcon={false} />
           </div>
         </div>

@@ -55,9 +55,6 @@ export default function EventsDashboard() {
             MONAD<span className="text-primary">.PWA</span>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/home" className="text-sm font-medium hover:text-primary transition-colors hidden sm:block">
-              Discovery Feed
-            </Link>
             <WalletButton className="!px-4 !py-2 !text-sm !rounded-lg !shadow-none" showIcon={false} />
           </div>
         </div>
