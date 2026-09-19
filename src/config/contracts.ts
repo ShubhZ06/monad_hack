@@ -85,3 +85,75 @@ export const USDC_ABI = [
     outputs: [{ name: "", type: "uint256" }],
   },
 ] as const;
+
+export const REVIEW_COUPON_NFT_ADDRESS = (process.env.NEXT_PUBLIC_REVIEW_COUPON_NFT_ADDRESS || "0x108d337de9aad9166c5964911e0cbcd54995d1ac") as `0x${string}`;
+
+export const REVIEW_COUPON_NFT_ABI = [
+  {
+    name: "mintCoupon",
+    type: "function",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "_recipient", type: "address" },
+      { name: "_venueId", type: "string" },
+      { name: "_venueName", type: "string" },
+      { name: "_discountPercent", type: "uint8" },
+    ],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+  {
+    name: "hasCoupon",
+    type: "function",
+    stateMutability: "view",
+    inputs: [
+      { name: "", type: "address" },
+      { name: "", type: "string" },
+    ],
+    outputs: [{ name: "", type: "bool" }],
+  },
+  {
+    name: "getCoupon",
+    type: "function",
+    stateMutability: "view",
+    inputs: [{ name: "_tokenId", type: "uint256" }],
+    outputs: [
+      {
+        components: [
+          { name: "recipient", type: "address" },
+          { name: "venueId", type: "string" },
+          { name: "venueName", type: "string" },
+          { name: "discountPercent", type: "uint8" },
+          { name: "redeemed", type: "bool" },
+          { name: "mintedAt", type: "uint256" },
+        ],
+        name: "",
+        type: "tuple",
+      },
+    ],
+  },
+  {
+    name: "balanceOf",
+    type: "function",
+    stateMutability: "view",
+    inputs: [{ name: "_addr", type: "address" }],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+  {
+    name: "ownerOf",
+    type: "function",
+    stateMutability: "view",
+    inputs: [{ name: "tokenId", type: "uint256" }],
+    outputs: [{ name: "", type: "address" }],
+  },
+  {
+    name: "CouponMinted",
+    type: "event",
+    inputs: [
+      { name: "recipient", type: "address", indexed: true },
+      { name: "venueId", type: "string", indexed: false },
+      { name: "tokenId", type: "uint256", indexed: false },
+      { name: "discountPercent", type: "uint8", indexed: false },
+    ],
+  },
+] as const;
+

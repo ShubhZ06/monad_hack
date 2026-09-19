@@ -1,5 +1,6 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
+import { mintCouponOnChain } from '@/lib/monad/nftMinter';
 
 // In-memory fallback cache for demo reliability if Supabase table is empty or RLS is blocking
 let memoryCoupons: any[] = [
@@ -19,7 +20,7 @@ let memoryCoupons: any[] = [
   }
 ];
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const wallet = searchParams.get('wallet')?.toLowerCase();
@@ -48,7 +49,7 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { venue_id, venue_name, wallet_address, discount_percent = 20 } = body;
@@ -57,7 +58,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'wallet_address is required' }, { status: 400 });
     }
 
-    // Generate Monad Testnet NFT metadata
+    // Mint Monad Testnet NFT coupon on-chain
     const randomHex = Math.random().toString(16).substring(2, 8).toUpperCase();
     const cleanVenueCode = (venue_name || 'MONAD')
       .replace(/[^a-zA-Z0-9]/g, '')
@@ -65,14 +66,16 @@ export async function POST(request: Request) {
       .toUpperCase();
     
     const discount_code = `${cleanVenueCode}-20-${randomHex}`;
-    const token_id = Math.floor(1000 + Math.random() * 9000);
     
-    // Generate realistic Monad Testnet transaction hash
-    const txChars = '0123456789abcdef';
-    let txHash = '0x';
-    for (let i = 0; i < 64; i++) {
-      txHash += txChars[Math.floor(Math.random() * txChars.length)];
-    }
+    const mintResult = await mintCouponOnChain(
+      wallet_address,
+      venue_id || 'default-venue',
+      venue_name || 'Monad Partner Venue',
+      discount_percent
+    );
+
+    const token_id = mintResult.tokenId;
+    const txHash = mintResult.txHash;
 
     const newCoupon = {
       id: crypto.randomUUID(),

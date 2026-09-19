@@ -1,6 +1,7 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
 import { addReviewToMemory, liveVenues, syncMonadCafeToLocation } from '@/lib/venuesData';
+import { mintCouponOnChain } from '@/lib/monad/nftMinter';
 
 function haversineDistance(
   lat1: number, lng1: number,
@@ -19,7 +20,7 @@ function haversineDistance(
   return R * c;
 }
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient();
     const { searchParams } = new URL(request.url);
@@ -48,7 +49,7 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { venue_id, venue_name, wallet_address, rating, vibe_tag, comment, image_url, user_lat, user_lng, is_simulated } = body;
@@ -162,13 +163,17 @@ export async function POST(request: Request) {
         .toUpperCase();
       
       const discount_code = `${cleanVenueCode}-20-${randomHex}`;
-      const token_id = Math.floor(1000 + Math.random() * 9000);
-      
-      const txChars = '0123456789abcdef';
-      let txHash = '0x';
-      for (let i = 0; i < 64; i++) {
-        txHash += txChars[Math.floor(Math.random() * txChars.length)];
-      }
+
+      // Call on-chain ReviewCouponNFT contract on Monad Testnet!
+      const mintResult = await mintCouponOnChain(
+        wallet_address,
+        venue_id,
+        venue_name || 'Monad Partner Venue',
+        20
+      );
+
+      const token_id = mintResult.tokenId;
+      const txHash = mintResult.txHash;
 
       issuedCoupon = {
         id: crypto.randomUUID(),
