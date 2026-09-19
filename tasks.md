@@ -31,8 +31,8 @@ This document splits the MVP build into two distinct tracks.
 **Focus:** Monad Smart Contracts, Postgres Database (off-chain state), and API Routes.
 
 ### 1. Smart Contracts (Foundry + Monad)
-- [ ] **`VenueRegistry.sol`**: Write contract to handle venue onboarding fees (accepting USDC/Native token). Include a mapping of verified venues.
-- [ ] **`EventEscrow.sol`**: Write the core state machine for group events. Needs functions for: `pledge()`, `lock()`, `refund()`, and `releaseFunds()`.
+- [x] **`VenueRegistry.sol`**: Write contract to handle venue onboarding fees (accepting USDC/Native token). Include a mapping of verified venues.
+- [x] **`EventEscrow.sol`**: Write the core state machine for group events. Needs functions for: `pledge()`, `lock()`, `refund()`, and `releaseFunds()`.
 - [ ] **`AttendanceBadge.sol`**: Write a simple ERC-721/ERC-1155 Soulbound token that mints to an address upon successful check-in.
 - [ ] **Testing & Deploy:** Write Foundry tests (`forge test`) for the escrow threshold logic and deploy to Monad Testnet.
 

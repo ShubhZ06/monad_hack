@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import { ArrowRight, MapPin, Users, Zap } from 'lucide-react';
+import { MapPin, Users, Zap } from 'lucide-react';
+import { WalletButton } from '@/components/WalletButton';
 
 export default function LandingPage() {
   return (
@@ -10,9 +10,8 @@ export default function LandingPage() {
           <div className="font-mono font-bold text-xl tracking-tighter">
             MONAD<span className="text-primary">.PWA</span>
           </div>
-          <button className="bg-primary text-primary-foreground px-4 py-2 rounded-lg font-bold text-sm hover:opacity-90 transition-opacity">
-            Connect Wallet
-          </button>
+          {/* Small Wallet Button for Navbar */}
+          <WalletButton className="!px-4 !py-2 !text-sm !rounded-lg !shadow-none" showIcon={false} />
         </div>
       </nav>
 
@@ -33,9 +32,8 @@ export default function LandingPage() {
           discovers trusted venues, and holds funds safely in smart contract escrow.
         </p>
 
-        <button className="bg-primary text-primary-foreground px-8 py-4 rounded-xl font-bold text-lg flex items-center gap-2 hover:scale-105 transition-transform shadow-[0_0_30px_rgba(204,255,0,0.3)]">
-          Connect MetaMask to Enter <ArrowRight size={20} />
-        </button>
+        {/* Main CTA Wallet Button */}
+        <WalletButton />
 
         {/* Features Grid */}
         <div className="grid md:grid-cols-3 gap-6 w-full mt-32 text-left">
