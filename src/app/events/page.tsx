@@ -1,9 +1,25 @@
 import { WalletButton } from '@/components/WalletButton';
-import { Calendar, Users, DollarSign, Lock, Clock, ThumbsUp } from 'lucide-react';
+import { Calendar, Users, DollarSign, Lock, Clock, ThumbsUp, Zap, Trophy, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 // Mock data to visualize the different states of the Escrow Loop
 const EVENTS = [
+  {
+    id: 'event-neon-nights-bidding',
+    title: 'Neon Nights Rooftop Rave & Hackathon Afterparty',
+    organizer: 'Monad Builders DAO',
+    state: 'BIDDING', // Full quorum met -> Reverse auction live!
+    price: '₹1,100',
+    currency: 'INR',
+    targetHeadcount: 50,
+    currentHeadcount: 50,
+    currentPledges: 0,
+    bidsCount: 3,
+    minBidInr: 1100,
+    date: 'Oct 25, 2026',
+    timeRemaining: 'Reverse Auction Open',
+    description: '50 verified Monad builders have voted "I am in"! Reverse auction is live: vendors compete with minimum INR charges to win the contract. Entry fee: 0.05 MON.',
+  },
   {
     id: '1',
     title: 'Rooftop Movie Night',
@@ -82,6 +98,11 @@ export default function EventsDashboard() {
               
               {/* Status Badge */}
               <div className="absolute top-6 right-6">
+                {event.state === 'BIDDING' && (
+                  <span className="bg-primary/20 text-primary border border-primary/40 px-3 py-1 rounded-full text-xs font-black animate-pulse flex items-center gap-1.5 shadow-[0_0_12px_rgba(204,255,0,0.2)]">
+                    <Zap size={12} className="fill-primary" /> 100% VOTED • REVERSE BIDDING OPEN
+                  </span>
+                )}
                 {event.state === 'PLEDGING' && (
                   <span className="bg-primary/20 text-primary border border-primary/30 px-3 py-1 rounded-full text-xs font-bold animate-pulse">
                     PLEDGING LIVE
@@ -125,6 +146,28 @@ export default function EventsDashboard() {
               {/* Progress Bar & Actions */}
               <div className="mt-auto pt-4 border-t border-border">
                 
+                {event.state === 'BIDDING' && (
+                  <div>
+                    <div className="flex justify-between text-sm mb-2 font-medium">
+                      <span className="text-primary font-bold">50 / 50 Votes Reached (100% Quorum)</span>
+                      <span className="text-foreground font-mono font-bold flex items-center gap-1">
+                        <Trophy size={13} className="text-primary" /> Min: {event.price}
+                      </span>
+                    </div>
+                    <div className="w-full bg-background rounded-full h-2 mb-4 overflow-hidden border border-border">
+                      <div 
+                        className="bg-primary h-2 rounded-full w-full"
+                      ></div>
+                    </div>
+                    <Link href={`/events/${event.id}`}>
+                      <button className="w-full bg-primary text-primary-foreground font-black py-3.5 rounded-xl hover:brightness-110 transition-all flex justify-center items-center gap-2 text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(204,255,0,0.3)]">
+                        <Zap size={14} className="fill-primary-foreground" />
+                        Enter Bidding Arena ({event.bidsCount || 3} Competing Bids) →
+                      </button>
+                    </Link>
+                  </div>
+                )}
+
                 {event.state === 'PLEDGING' && (
                   <div>
                     <div className="flex justify-between text-sm mb-2 font-medium">

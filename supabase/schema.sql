@@ -37,6 +37,7 @@ CREATE TABLE public.users (
     ens_name TEXT,
     is_student_verified BOOLEAN DEFAULT FALSE,
     college_id_image_url TEXT,
+    role TEXT NOT NULL DEFAULT 'USER', -- 'USER', 'VENDOR', 'ORGANIZER'
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -110,6 +111,41 @@ CREATE TABLE IF NOT EXISTS public.coupons (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- 11. Vendors Table (For registered event organizers, venues, sound providers)
+CREATE TABLE IF NOT EXISTS public.vendors (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    wallet_address TEXT REFERENCES public.users(wallet_address) ON DELETE CASCADE UNIQUE,
+    business_name TEXT NOT NULL,
+    category TEXT NOT NULL DEFAULT 'Event Organizer', -- 'Venue & Rooftop', 'DJ & Sound', 'Catering & Bar', 'Full Production'
+    description TEXT,
+    contact_info TEXT,
+    website_url TEXT,
+    rating NUMERIC DEFAULT 4.9,
+    total_completed_events INTEGER DEFAULT 14,
+    is_verified BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 12. Vendor Bids Table (Reverse Auction Bids for Fully-Voted Events)
+CREATE TABLE IF NOT EXISTS public.vendor_bids (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    event_id UUID REFERENCES public.event_requests(id) ON DELETE CASCADE,
+    vendor_id UUID REFERENCES public.vendors(id) ON DELETE CASCADE,
+    vendor_wallet TEXT NOT NULL,
+    vendor_name TEXT NOT NULL,
+    participation_fee_mon NUMERIC DEFAULT 0.05,
+    participation_fee_tx TEXT,
+    price_per_head_inr NUMERIC NOT NULL,
+    total_amount_inr NUMERIC NOT NULL,
+    mon_equivalent NUMERIC,
+    proposal_pitch TEXT NOT NULL,
+    services_included TEXT[] DEFAULT '{}',
+    revision_count INTEGER DEFAULT 1,
+    status TEXT NOT NULL DEFAULT 'ACTIVE', -- 'ACTIVE', 'OUTBID', 'ACCEPTED'
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Disable RLS for MVP / demo testing so client app can read/write all tables
 ALTER TABLE IF EXISTS public.venues DISABLE ROW LEVEL SECURITY;
 ALTER TABLE IF EXISTS public.reviews DISABLE ROW LEVEL SECURITY;
@@ -120,6 +156,8 @@ ALTER TABLE IF EXISTS public.coupons DISABLE ROW LEVEL SECURITY;
 ALTER TABLE IF EXISTS public.communities DISABLE ROW LEVEL SECURITY;
 ALTER TABLE IF EXISTS public.community_members DISABLE ROW LEVEL SECURITY;
 ALTER TABLE IF EXISTS public.comments DISABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.vendors DISABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.vendor_bids DISABLE ROW LEVEL SECURITY;
 
 GRANT ALL ON public.venues TO anon, authenticated, service_role;
 GRANT ALL ON public.reviews TO anon, authenticated, service_role;
@@ -130,3 +168,5 @@ GRANT ALL ON public.coupons TO anon, authenticated, service_role;
 GRANT ALL ON public.communities TO anon, authenticated, service_role;
 GRANT ALL ON public.community_members TO anon, authenticated, service_role;
 GRANT ALL ON public.comments TO anon, authenticated, service_role;
+GRANT ALL ON public.vendors TO anon, authenticated, service_role;
+GRANT ALL ON public.vendor_bids TO anon, authenticated, service_role;
