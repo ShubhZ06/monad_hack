@@ -22,6 +22,16 @@ export const metadata: Metadata = {
   title: "FoMo — Discover the Vibe",
   description: "Curated social venue discovery and verified group experiences on Monad",
   manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: "/logo.png" },
+      { url: "/icons/icon-192x192.png", sizes: "192x192", type: "image/png" },
+    ],
+    shortcut: "/logo.png",
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

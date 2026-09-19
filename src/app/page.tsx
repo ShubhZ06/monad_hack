@@ -9,10 +9,12 @@ export default function LandingPage() {
       {/* Navigation */}
       <nav className="border-b border-[#eee7dc] bg-white/85 backdrop-blur-md fixed top-0 w-full z-50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-full bg-neutral-900 flex items-center justify-center text-white font-bold text-xs shadow-sm">
-              F
-            </div>
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <img
+              src="/logo.png"
+              alt="FoMo Logo"
+              className="w-8 h-8 rounded-full object-cover shadow-sm border border-[#eee7dc]"
+            />
             <span className="font-display italic font-bold text-xl tracking-tight text-neutral-900">
               FoMo<span className="text-primary not-italic font-black">.</span>
             </span>

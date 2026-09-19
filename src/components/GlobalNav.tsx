@@ -22,10 +22,12 @@ export function GlobalNav() {
     <nav className="border-b border-neutral-150 bg-white/85 backdrop-blur-md sticky top-0 z-50">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
         {/* Season Mix Editorial App Logo */}
-        <Link href="/home" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 rounded-full bg-neutral-900 flex items-center justify-center text-white font-bold text-xs shadow-sm group-hover:scale-105 transition-transform">
-            F
-          </div>
+        <Link href="/home" className="flex items-center gap-2.5 group">
+          <img
+            src="/logo.png"
+            alt="FoMo Logo"
+            className="w-8 h-8 rounded-full object-cover shadow-sm group-hover:scale-105 transition-transform border border-[#eee7dc]"
+          />
           <div className="flex flex-col">
             <span className="font-display italic font-bold text-xl sm:text-2xl tracking-tight text-neutral-900 leading-none">
               FoMo<span className="text-primary not-italic font-black ml-0.5">.</span>
