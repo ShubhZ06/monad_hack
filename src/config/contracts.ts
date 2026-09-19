@@ -86,9 +86,21 @@ export const USDC_ABI = [
   },
 ] as const;
 
-export const REVIEW_COUPON_NFT_ADDRESS = (process.env.NEXT_PUBLIC_REVIEW_COUPON_NFT_ADDRESS || "0x108d337de9aad9166c5964911e0cbcd54995d1ac") as `0x${string}`;
+export const REVIEW_COUPON_NFT_ADDRESS = (process.env.NEXT_PUBLIC_REVIEW_COUPON_NFT_ADDRESS || "0x50a285f62c994c5cba4d3df13960220249ee0bed") as `0x${string}`;
 
 export const REVIEW_COUPON_NFT_ABI = [
+  {
+    name: "coupon",
+    type: "function",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "_recipient", type: "address" },
+      { name: "_venueId", type: "string" },
+      { name: "_venueName", type: "string" },
+      { name: "_discountPercent", type: "uint8" },
+    ],
+    outputs: [{ name: "", type: "uint256" }],
+  },
   {
     name: "mintCoupon",
     type: "function",

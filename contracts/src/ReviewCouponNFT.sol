@@ -56,12 +56,12 @@ contract ReviewCouponNFT {
      * Called by the backend API after verifying the review is genuine and geo-locked.
      * Enforces one coupon per wallet per venue.
      */
-    function mintCoupon(
+    function _mintCouponInternal(
         address _recipient,
-        string calldata _venueId,
-        string calldata _venueName,
+        string memory _venueId,
+        string memory _venueName,
         uint8 _discountPercent
-    ) external onlyOwner returns (uint256) {
+    ) internal returns (uint256) {
         require(_recipient != address(0), "Cannot mint to zero address");
         require(!hasCoupon[_recipient][_venueId], "ReviewCouponNFT: Wallet already has a coupon for this venue");
         require(_discountPercent > 0 && _discountPercent <= 100, "Invalid discount percent");
@@ -86,6 +86,31 @@ contract ReviewCouponNFT {
 
         return tokenId;
     }
+
+    /**
+     * @dev Convenient method so block explorers (MonadVision) display the method as "Coupon" (matching "Pledge")
+     */
+    function coupon(
+        address _recipient,
+        string calldata _venueId,
+        string calldata _venueName,
+        uint8 _discountPercent
+    ) external onlyOwner returns (uint256) {
+        return _mintCouponInternal(_recipient, _venueId, _venueName, _discountPercent);
+    }
+
+    /**
+     * @dev Standard mint function
+     */
+    function mintCoupon(
+        address _recipient,
+        string calldata _venueId,
+        string calldata _venueName,
+        uint8 _discountPercent
+    ) external onlyOwner returns (uint256) {
+        return _mintCouponInternal(_recipient, _venueId, _venueName, _discountPercent);
+    }
+
 
     /**
      * @dev Mark a coupon as redeemed (used at the venue).

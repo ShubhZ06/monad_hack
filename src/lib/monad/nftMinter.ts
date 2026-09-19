@@ -88,11 +88,11 @@ export async function mintCouponOnChain(
 
     console.log(`Minting Monad Review Coupon NFT for ${checksumRecipient} at ${venueName}...`);
 
-    // Submit transaction to Monad Testnet
+    // Submit transaction to Monad Testnet (calling 'coupon' so block explorer shows "Coupon")
     const txHash = await client.writeContract({
       address: contractAddress,
       abi: REVIEW_COUPON_NFT_ABI,
-      functionName: 'mintCoupon',
+      functionName: 'coupon',
       args: [checksumRecipient, venueId, venueName, discountPercent],
     });
 

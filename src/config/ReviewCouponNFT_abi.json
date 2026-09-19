@@ -101,6 +101,40 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "_recipient",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "_venueId",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_venueName",
+        "type": "string"
+      },
+      {
+        "internalType": "uint8",
+        "name": "_discountPercent",
+        "type": "uint8"
+      }
+    ],
+    "name": "coupon",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
