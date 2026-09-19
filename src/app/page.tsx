@@ -15,8 +15,8 @@ export default function LandingPage() {
               alt="FoMo Logo"
               className="w-8 h-8 rounded-full object-cover shadow-sm border border-[#eee7dc]"
             />
-            <span className="font-display italic font-bold text-xl tracking-tight text-neutral-900">
-              FoMo<span className="text-primary not-italic font-black">.</span>
+            <span className="font-bold text-xl tracking-tight text-neutral-900">
+              FoMo<span className="text-primary font-black">.</span>
             </span>
           </Link>
           <WalletButton className="!px-4 !py-2 !text-xs !rounded-full !shadow-sm" showIcon={false} />
@@ -30,9 +30,9 @@ export default function LandingPage() {
           Live on Monad Testnet
         </div>
         
-        <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight mb-5 max-w-3xl text-neutral-900 leading-[1.08]">
-          Discover the <span className="italic text-primary font-normal">Vibe.</span> <br />
-          <span className="text-neutral-500 font-normal italic">Fund the Experience.</span>
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight mb-5 max-w-3xl text-neutral-900 leading-[1.08]">
+          Discover the <span className="text-primary font-extrabold">Vibe.</span> <br />
+          <span className="text-neutral-500 font-bold">Fund the Experience.</span>
         </h1>
         
         <p className="text-sm sm:text-base md:text-lg text-neutral-600 max-w-xl mb-8 leading-relaxed">

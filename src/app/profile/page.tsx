@@ -67,7 +67,7 @@ export default function ProfilePage() {
             {/* Profile Info */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5 mb-1">
-                <h1 className="font-display italic font-bold text-xl sm:text-2xl text-neutral-900 truncate">
+                <h1 className="font-bold text-xl sm:text-2xl text-neutral-900 truncate">
                   @{username}
                 </h1>
                 <span className="w-4 h-4 rounded-full bg-primary text-white flex items-center justify-center shrink-0">

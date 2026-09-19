@@ -33,8 +33,8 @@ export default function EventsDashboard() {
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               Live Monad Testnet Escrow Contract (Chain ID: 10143)
             </div>
-            <h1 className="font-display italic font-bold text-3xl sm:text-4xl text-neutral-900 tracking-tight leading-tight">
-              Community <span className="text-primary not-italic">Trips & Requests</span>
+            <h1 className="font-bold text-3xl sm:text-4xl text-neutral-900 tracking-tight leading-tight">
+              Community <span className="text-primary">Trips & Requests</span>
             </h1>
             <p className="text-xs sm:text-sm text-neutral-500 mt-1 max-w-xl leading-relaxed">
               Vote with your wallet. Propose group events, aggregate demand, and pledge funds securely into on-chain smart contract escrow.

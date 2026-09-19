@@ -44,8 +44,8 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   
-  --font-sans: var(--font-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-serif: var(--font-playfair), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
 }
 
 body {
@@ -87,9 +87,9 @@ body {
   -webkit-backdrop-filter: blur(12px);
 }
 
-/* Editorial Typography Helpers */
+/* Display Typography Helpers */
 .font-display {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
 }
 
 

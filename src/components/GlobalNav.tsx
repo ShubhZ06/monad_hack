@@ -29,11 +29,11 @@ export function GlobalNav() {
             className="w-8 h-8 rounded-full object-cover shadow-sm group-hover:scale-105 transition-transform border border-[#eee7dc]"
           />
           <div className="flex flex-col">
-            <span className="font-display italic font-bold text-xl sm:text-2xl tracking-tight text-neutral-900 leading-none">
-              FoMo<span className="text-primary not-italic font-black ml-0.5">.</span>
+            <span className="font-bold text-xl sm:text-2xl tracking-tight text-neutral-900 leading-none">
+              FoMo<span className="text-primary font-black ml-0.5">.</span>
             </span>
             <span className="text-[9px] font-semibold text-neutral-400 uppercase tracking-widest leading-none mt-0.5">
-              SEASON VIBES
+              SOCIAL DISCOVERY
             </span>
           </div>
         </Link>

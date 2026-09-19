@@ -57,7 +57,7 @@ export function CouponsDrawer({ isOpen, onClose, coupons, onRedeem }: CouponsDra
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <h3 className="font-display italic font-bold text-xl text-neutral-900">NFT Coupons</h3>
+                <h3 className="font-bold text-xl text-neutral-900">NFT Coupons</h3>
                 <span className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full">
                   {coupons.length}
                 </span>

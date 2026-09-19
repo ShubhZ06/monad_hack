@@ -5,7 +5,7 @@ import { injected } from 'wagmi/connectors';
 export const config = createConfig({
   chains: [monadTestnet],
   connectors: [
-    injected(),
+    injected({ shimDisconnect: true }),
   ],
   transports: {
     [monadTestnet.id]: http(),
