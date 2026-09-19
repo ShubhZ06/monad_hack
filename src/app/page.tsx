@@ -1,5 +1,6 @@
 import { MapPin, Users, Zap } from 'lucide-react';
 import { WalletButton } from '@/components/WalletButton';
+import { InstallPWA } from '@/components/InstallPWA';
 
 export default function LandingPage() {
   return (
@@ -34,6 +35,9 @@ export default function LandingPage() {
 
         {/* Main CTA Wallet Button */}
         <WalletButton />
+        
+        {/* PWA Install Prompt for Mobile Devices */}
+        <InstallPWA />
 
         {/* Features Grid */}
         <div className="grid md:grid-cols-3 gap-6 w-full mt-32 text-left">

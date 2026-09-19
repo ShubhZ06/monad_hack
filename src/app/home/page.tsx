@@ -48,7 +48,7 @@ export default function DiscoveryFeed() {
             MONAD<span className="text-primary">.PWA</span>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/events" className="text-sm font-medium hover:text-primary transition-colors hidden sm:block">
+            <Link href="/events" className="text-sm font-bold bg-secondary text-secondary-foreground px-4 py-2 rounded-lg hover:bg-border transition-colors">
               My Events
             </Link>
             <WalletButton className="!px-4 !py-2 !text-sm !rounded-lg !shadow-none" showIcon={false} />
@@ -111,9 +111,11 @@ export default function DiscoveryFeed() {
                 </div>
                 
                 <div className="mt-auto pt-4 border-t border-border">
-                  <button className="w-full bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground font-bold py-3 rounded-xl transition-colors">
-                    Propose a Trip Here
-                  </button>
+                  <Link href="/events" className="w-full block">
+                    <button className="w-full bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground font-bold py-3 rounded-xl transition-colors">
+                      Propose a Trip Here
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>

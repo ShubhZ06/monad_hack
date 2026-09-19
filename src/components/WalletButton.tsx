@@ -1,7 +1,7 @@
 'use client';
 
 import { useAccount, useConnect, useDisconnect, useEnsName } from 'wagmi';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { ArrowRight, LogOut } from 'lucide-react';
 
@@ -16,13 +16,14 @@ export function WalletButton({ className = "", showIcon = true }: WalletButtonPr
   const { connect, connectors, isPending } = useConnect();
   const { disconnect } = useDisconnect();
   const router = useRouter();
+  const pathname = usePathname();
 
-  // If connected, automatically push to /home
+  // If connected and on the landing page, automatically push to /home
   useEffect(() => {
-    if (isConnected) {
+    if (isConnected && pathname === '/') {
       router.push('/home');
     }
-  }, [isConnected, router]);
+  }, [isConnected, router, pathname]);
 
   // We use the first injected connector (MetaMask)
   const metaMaskConnector = connectors.find((c) => c.id === 'injected' || c.name.toLowerCase().includes('metamask')) || connectors[0];

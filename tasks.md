@@ -19,10 +19,10 @@ This document splits the MVP build into two distinct tracks.
 - [ ] Create UI states for loading, pending transactions, and confirmed transactions.
 
 ### 3. Core Pages (UI Implementation)
-- [ ] **Discovery Feed (`/home`):** Build the feed of venue cards with images and Vibe Ratings (seen after login).
+- [x] **Discovery Feed (`/home`):** Build the feed of venue cards with images and Vibe Ratings (seen after login).
 - [ ] **Venue Detail (`/venues/[id]`):** Page showing venue details and a "Propose Trip" button.
 - [ ] **Community Hub (`/communities/[id]`):** Feed of active event requests for a specific college.
-- [ ] **Event Escrow (`/events/[id]`):** The interactive page where users vote on bids and pledge funds.
+- [x] **Event Escrow (`/events/[id]`):** The interactive page where users vote on bids and pledge funds.
 - [ ] **Organizer Dashboard (`/dashboard`):** A portal for venues to pay onboarding fees and submit bids.
 
 ---
@@ -33,19 +33,19 @@ This document splits the MVP build into two distinct tracks.
 ### 1. Smart Contracts (Foundry + Monad)
 - [x] **`VenueRegistry.sol`**: Write contract to handle venue onboarding fees (accepting USDC/Native token). Include a mapping of verified venues.
 - [x] **`EventEscrow.sol`**: Write the core state machine for group events. Needs functions for: `pledge()`, `lock()`, `refund()`, and `releaseFunds()`.
-- [ ] **`AttendanceBadge.sol`**: Write a simple ERC-721/ERC-1155 Soulbound token that mints to an address upon successful check-in.
+- [x] **`AttendanceBadge.sol`**: Write a simple ERC-721/ERC-1155 Soulbound token that mints to an address upon successful check-in.
 - [ ] **Testing & Deploy:** Write Foundry tests (`forge test`) for the escrow threshold logic and deploy to Monad Testnet.
 
 ### 2. Off-Chain Database (Supabase / Postgres)
 *Why? We can't store images, long reviews, and request drafts on-chain—it's too expensive and slow.*
-- [ ] Set up DB schema for **Users** (wallet address, college ID status).
-- [ ] Set up DB schema for **Venues** (images, description, off-chain vibe ratings).
-- [ ] Set up DB schema for **Event Requests** (title, description, soft-interest count).
+- [x] Set up DB schema for **Users** (wallet address, college ID status).
+- [x] Set up DB schema for **Venues** (images, description, off-chain vibe ratings).
+- [x] Set up DB schema for **Event Requests** (title, description, soft-interest count).
 
 ### 3. Next.js API Routes (Backend Logic)
 - [ ] Create `/api/verify-id`: A mock endpoint to handle college ID photo uploads and approve users.
-- [ ] Create `/api/venues`: Fetch the list of venues for the Discovery Feed.
-- [ ] Create `/api/events`: Endpoints to create a new event request and register "Soft Interest".
+- [x] Create `/api/venues`: Fetch the list of venues for the Discovery Feed.
+- [x] Create `/api/events`: Endpoints to create a new event request and register "Soft Interest".
 
 ---
 
